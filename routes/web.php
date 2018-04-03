@@ -22,6 +22,5 @@ Route::get('home', 'HomeController@home')->name('home');
 Route::resource('articles', 'ArticlesController');
 Route::get('actualites', 'ArticlesController@home');
 
-Route::resource('vue-collaborateurs', 'CollaborateurController', [ 'except' => ['edit', 'create']]
-);
+Route::resource('vue-collaborateurs', 'CollaborateurController');
 Route::get('collaborateurs', 'CollaborateurController@home');

@@ -20,7 +20,7 @@ class CreateCollaborateursTable extends Migration
             $table->string('prenom');
             $table->date('date_naissance');
             $table->string('post');
-            $table->string('email');
+            $table->string('email')->unique();
             $table->integer('telephone');
             $table->string('adresse');
             $table->timestamps();

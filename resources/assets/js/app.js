@@ -22,7 +22,11 @@ require('froala-editor/css/froala_style.min.css')
 
 // Import and use Vue Froala lib.
 import VueFroala from 'vue-froala-wysiwyg'
+
+
 Vue.use(VueFroala)
+Vue.use(VeeValidate);
+
 
 Vue.component('collaborateurs', require('./components/Collaborateurs'));
 
@@ -30,6 +34,9 @@ import ArticlesIndex from './components/ArticlesIndex';
 import ArticlesCreate from './components/ArticlesCreate';
 import ArticlesEdit from './components/ArticlesEdit';
 import ArticleShow from './components/ArticleShow';
+
+import Vue from 'vue';
+import VeeValidate from 'vee-validate';
 
 
 const routes = [
