@@ -45,37 +45,49 @@
 
                                 <div class="col-lg-12">
                                     <div class="form-group">
-                                        <label>Image</label>
-                                        <input type="file" data-preview="#preview" @change="imageChangedOnCreate" :src="'http://localhost:8000/'+newItem.image"  class="form-control">
+                                        <label>Image: </label><span class="required">*</span>
+                                        <input required type="file" data-preview="#preview" @change="imageChangedOnCreate" :src="'http://localhost:8000/'+newItem.image"  class="form-control">
                                     </div>
+                                </div>
+
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <label>Nom: </label> <span class="required">*</span>
+                                        <input name= "nom" type="text" v-validate= "'required|alpha'" :class="{'input': true, 'is-danger': errors.has('nom') }" class="form-control" v-model="newItem.nom">
+                                        <i v-show="errors.has('nom')" class="fa fa-warning"></i>
+                                        <span v-show="errors.has('nom')" class="" style="color: red">{{ errors.first('nom') }}</span>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <label>Prenom: </label> <span class="required">*</span>
+                                        <input name= "prenom" type="text" v-validate= "'required|alpha'" :class="{'input': true, 'is-danger': errors.has('prenom') }" class="form-control" v-model="newItem.prenom">
+                                        <i v-show="errors.has('prenom')" class="fa fa-warning"></i>
+                                        <span v-show="errors.has('prenom')" class="" style="color: red">{{ errors.first('prenom') }}</span>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <label>Adresse: </label> <span class="required">*</span>
+                                        <input name= "adresse" type="text" v-validate= "'required'" :class="{'input': true, 'is-danger': errors.has('adresse') }" class="form-control" v-model="newItem.adresse">
+                                        <i v-show="errors.has('adresse')" class="fa fa-warning"></i>
+                                        <span v-show="errors.has('adresse')" class="" style="color: red">{{ errors.first('adresse') }}</span>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                            <label>Post: </label> <span class="required">*</span>
+                                            <input name= "post" type="text" v-validate= "'required|alpha'" :class="{'input': true, 'is-danger': errors.has('post') }" class="form-control" v-model="newItem.post">
+                                            <i v-show="errors.has('post')" class="fa fa-warning"></i>
+                                            <span v-show="errors.has('post')" class="" style="color: red">{{ errors.first('post') }}</span>
+                                        </div>
                                 </div>
                                 <div class="col-lg-12">
                                     <div class="form-group">
-                                        <label>Nom</label>
-                                        <input type="text" class="form-control" v-model="newItem.nom">
-                                    </div>
-                                </div>
-                                <div class="col-lg-12">
-                                    <div class="form-group">
-                                        <label>Prenom</label>
-                                        <input type="text" class="form-control" v-model="newItem.prenom">
-                                    </div>
-                                </div>
-                                <div class="col-lg-12">
-                                    <div class="form-group">
-                                        <label>Adresse</label>
-                                        <input type="text" class="form-control" v-model="newItem.adresse">
-                                    </div>
-                                </div>
-                                <div class="col-lg-12">
-                                    <div class="form-group">
-                                        <label>Post</label>
-                                        <input type="text" class="form-control" v-model="newItem.post">
-                                    </div>
-                                </div>
-                                <div class="col-lg-12">
-                                    <div class="form-group">
-                                        <label >Email <span class="required">*</span> </label>
+                                        <label >Email: <span class="required">*</span> </label>
                                        <input name= "email" v-model="newItem.email" required  v-validate="'required|email'" :class="{'input': true, 'is-danger': errors.has('email') }" class="form-control" >
                                         <span v-show="errors.has('email')" style="color: red" class="text-danger">{{ errors.first('email') }}</span>
 
@@ -83,16 +95,18 @@
                                 </div>
                                 <div class="col-lg-12">
                                     <div class="form-group">
-                                        <label>Telephone</label>
-                                        <input name="telephone" v-validate="'required|numeric'" :class="{'input': true, 'is-danger': errors.has('telephone') }" type="text" class="form-control" v-model="newItem.telephone">
+                                        <label>Telephone: <span class="required">*</span> </label>
+                                        <input name="telephone" v-validate="'required'" :class="{'input': true, 'is-danger': errors.has('telephone') }" type="text" class="form-control" v-model="newItem.telephone">
                                         <i v-show="errors.has('telephone')" class="fa fa-warning"></i>
                                         <span v-show="errors.has('telephone')" class="" style="color: red">{{ errors.first('telephone') }}</span>
                                     </div>
                                 </div>
                                 <div class="col-lg-12">
                                     <div class="form-group">
-                                        <label>Date de naissance</label>
-                                        <flat-pickr :config="config" placeholder="Choisissez une date"  class="form-control" v-model="newItem.date_naissance"> </flat-pickr>
+                                        <label>Date de naissance: <span class="required">*</span> </label>
+                                        <flat-pickr name="date"  :class="{'input': true, 'is-danger': errors.has('date') }" v-validate="'required|date_format:YYYY-MM-DD'" :config="config" placeholder="Choisissez une date"  class="form-control" v-model="newItem.date_naissance"> </flat-pickr>
+                                        <i v-show="errors.has('date')" class="fa fa-warning"></i>
+                                        <span v-show="errors.has('date')" class="" style="color: red">{{ errors.first('date') }}</span>
                                     </div>
                                 </div>
                             </div>
@@ -163,7 +177,7 @@
                                 <div class="col-lg-12">
                                     <div class="form-group">
                                         <label>Date de naissance</label>
-                                        <input type="text" class="form-control" v-model="fillItem.date_naissance">
+                                        <flat-pickr :config="config" placeholder="Choisissez une date"  class="form-control" v-model="fillItem.date_naissance"> <i class="icon-calendar"></i> </flat-pickr>
                                     </div>
                                 </div>
                             </div>
