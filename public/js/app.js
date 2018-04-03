@@ -51557,6 +51557,25 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -54912,12 +54931,17 @@ var render = function() {
                       _c("div", { staticClass: "modal-body" }, [
                         _c("div", { staticClass: "col-lg-12" }, [
                           _c("div", { staticClass: "form-group" }, [
-                            _c("label", [_vm._v("Image")]),
+                            _c("label", [_vm._v("Image: ")]),
+                            _c("span", { staticClass: "required" }, [
+                              _vm._v("*")
+                            ]),
                             _vm._v(" "),
                             _c("input", {
                               staticClass: "form-control",
                               attrs: {
+                                required: "",
                                 type: "file",
+                                "data-preview": "#preview",
                                 src:
                                   "http://localhost:8000/" + _vm.fillItem.image
                               },
@@ -54928,10 +54952,20 @@ var render = function() {
                         _vm._v(" "),
                         _c("div", { staticClass: "col-lg-12" }, [
                           _c("div", { staticClass: "form-group" }, [
-                            _c("label", [_vm._v("Nom")]),
+                            _c("label", [_vm._v("Nom: ")]),
+                            _vm._v(" "),
+                            _c("span", { staticClass: "required" }, [
+                              _vm._v("*")
+                            ]),
                             _vm._v(" "),
                             _c("input", {
                               directives: [
+                                {
+                                  name: "validate",
+                                  rawName: "v-validate",
+                                  value: "required|alpha",
+                                  expression: "'required|alpha'"
+                                },
                                 {
                                   name: "model",
                                   rawName: "v-model",
@@ -54940,7 +54974,11 @@ var render = function() {
                                 }
                               ],
                               staticClass: "form-control",
-                              attrs: { type: "text" },
+                              class: {
+                                input: true,
+                                "is-danger": _vm.errors.has("nom")
+                              },
+                              attrs: { name: "nom", type: "text" },
                               domProps: { value: _vm.fillItem.nom },
                               on: {
                                 input: function($event) {
@@ -54954,16 +54992,54 @@ var render = function() {
                                   )
                                 }
                               }
-                            })
+                            }),
+                            _vm._v(" "),
+                            _c("i", {
+                              directives: [
+                                {
+                                  name: "show",
+                                  rawName: "v-show",
+                                  value: _vm.errors.has("nom"),
+                                  expression: "errors.has('nom')"
+                                }
+                              ],
+                              staticClass: "fa fa-warning"
+                            }),
+                            _vm._v(" "),
+                            _c(
+                              "span",
+                              {
+                                directives: [
+                                  {
+                                    name: "show",
+                                    rawName: "v-show",
+                                    value: _vm.errors.has("nom"),
+                                    expression: "errors.has('nom')"
+                                  }
+                                ],
+                                staticStyle: { color: "red" }
+                              },
+                              [_vm._v(_vm._s(_vm.errors.first("nom")))]
+                            )
                           ])
                         ]),
                         _vm._v(" "),
                         _c("div", { staticClass: "col-lg-12" }, [
                           _c("div", { staticClass: "form-group" }, [
-                            _c("label", [_vm._v("Prenom")]),
+                            _c("label", [_vm._v("Prenom: ")]),
+                            _vm._v(" "),
+                            _c("span", { staticClass: "required" }, [
+                              _vm._v("*")
+                            ]),
                             _vm._v(" "),
                             _c("input", {
                               directives: [
+                                {
+                                  name: "validate",
+                                  rawName: "v-validate",
+                                  value: "required|alpha",
+                                  expression: "'required|alpha'"
+                                },
                                 {
                                   name: "model",
                                   rawName: "v-model",
@@ -54972,7 +55048,11 @@ var render = function() {
                                 }
                               ],
                               staticClass: "form-control",
-                              attrs: { type: "text" },
+                              class: {
+                                input: true,
+                                "is-danger": _vm.errors.has("prenom")
+                              },
+                              attrs: { name: "prenom", type: "text" },
                               domProps: { value: _vm.fillItem.prenom },
                               on: {
                                 input: function($event) {
@@ -54986,16 +55066,54 @@ var render = function() {
                                   )
                                 }
                               }
-                            })
+                            }),
+                            _vm._v(" "),
+                            _c("i", {
+                              directives: [
+                                {
+                                  name: "show",
+                                  rawName: "v-show",
+                                  value: _vm.errors.has("prenom"),
+                                  expression: "errors.has('prenom')"
+                                }
+                              ],
+                              staticClass: "fa fa-warning"
+                            }),
+                            _vm._v(" "),
+                            _c(
+                              "span",
+                              {
+                                directives: [
+                                  {
+                                    name: "show",
+                                    rawName: "v-show",
+                                    value: _vm.errors.has("prenom"),
+                                    expression: "errors.has('prenom')"
+                                  }
+                                ],
+                                staticStyle: { color: "red" }
+                              },
+                              [_vm._v(_vm._s(_vm.errors.first("prenom")))]
+                            )
                           ])
                         ]),
                         _vm._v(" "),
                         _c("div", { staticClass: "col-lg-12" }, [
                           _c("div", { staticClass: "form-group" }, [
-                            _c("label", [_vm._v("Adresse")]),
+                            _c("label", [_vm._v("Adresse: ")]),
+                            _vm._v(" "),
+                            _c("span", { staticClass: "required" }, [
+                              _vm._v("*")
+                            ]),
                             _vm._v(" "),
                             _c("input", {
                               directives: [
+                                {
+                                  name: "validate",
+                                  rawName: "v-validate",
+                                  value: "required",
+                                  expression: "'required'"
+                                },
                                 {
                                   name: "model",
                                   rawName: "v-model",
@@ -55004,7 +55122,11 @@ var render = function() {
                                 }
                               ],
                               staticClass: "form-control",
-                              attrs: { type: "text" },
+                              class: {
+                                input: true,
+                                "is-danger": _vm.errors.has("adresse")
+                              },
+                              attrs: { name: "adresse", type: "text" },
                               domProps: { value: _vm.fillItem.adresse },
                               on: {
                                 input: function($event) {
@@ -55018,16 +55140,54 @@ var render = function() {
                                   )
                                 }
                               }
-                            })
+                            }),
+                            _vm._v(" "),
+                            _c("i", {
+                              directives: [
+                                {
+                                  name: "show",
+                                  rawName: "v-show",
+                                  value: _vm.errors.has("adresse"),
+                                  expression: "errors.has('adresse')"
+                                }
+                              ],
+                              staticClass: "fa fa-warning"
+                            }),
+                            _vm._v(" "),
+                            _c(
+                              "span",
+                              {
+                                directives: [
+                                  {
+                                    name: "show",
+                                    rawName: "v-show",
+                                    value: _vm.errors.has("adresse"),
+                                    expression: "errors.has('adresse')"
+                                  }
+                                ],
+                                staticStyle: { color: "red" }
+                              },
+                              [_vm._v(_vm._s(_vm.errors.first("adresse")))]
+                            )
                           ])
                         ]),
                         _vm._v(" "),
                         _c("div", { staticClass: "col-lg-12" }, [
                           _c("div", { staticClass: "form-group" }, [
-                            _c("label", [_vm._v("Post")]),
+                            _c("label", [_vm._v("Post: ")]),
+                            _vm._v(" "),
+                            _c("span", { staticClass: "required" }, [
+                              _vm._v("*")
+                            ]),
                             _vm._v(" "),
                             _c("input", {
                               directives: [
+                                {
+                                  name: "validate",
+                                  rawName: "v-validate",
+                                  value: "required|alpha",
+                                  expression: "'required|alpha'"
+                                },
                                 {
                                   name: "model",
                                   rawName: "v-model",
@@ -55036,7 +55196,11 @@ var render = function() {
                                 }
                               ],
                               staticClass: "form-control",
-                              attrs: { type: "text" },
+                              class: {
+                                input: true,
+                                "is-danger": _vm.errors.has("post")
+                              },
+                              attrs: { name: "post", type: "text" },
                               domProps: { value: _vm.fillItem.post },
                               on: {
                                 input: function($event) {
@@ -55050,13 +55214,41 @@ var render = function() {
                                   )
                                 }
                               }
-                            })
+                            }),
+                            _vm._v(" "),
+                            _c("i", {
+                              directives: [
+                                {
+                                  name: "show",
+                                  rawName: "v-show",
+                                  value: _vm.errors.has("post"),
+                                  expression: "errors.has('post')"
+                                }
+                              ],
+                              staticClass: "fa fa-warning"
+                            }),
+                            _vm._v(" "),
+                            _c(
+                              "span",
+                              {
+                                directives: [
+                                  {
+                                    name: "show",
+                                    rawName: "v-show",
+                                    value: _vm.errors.has("post"),
+                                    expression: "errors.has('post')"
+                                  }
+                                ],
+                                staticStyle: { color: "red" }
+                              },
+                              [_vm._v(_vm._s(_vm.errors.first("post")))]
+                            )
                           ])
                         ]),
                         _vm._v(" "),
                         _c("div", { staticClass: "col-lg-12" }, [
                           _c("div", { staticClass: "form-group" }, [
-                            _c("label", [_vm._v("Email")]),
+                            _vm._m(6),
                             _vm._v(" "),
                             _c("input", {
                               directives: [
@@ -55065,10 +55257,20 @@ var render = function() {
                                   rawName: "v-model",
                                   value: _vm.fillItem.email,
                                   expression: "fillItem.email"
+                                },
+                                {
+                                  name: "validate",
+                                  rawName: "v-validate",
+                                  value: "required|email",
+                                  expression: "'required|email'"
                                 }
                               ],
                               staticClass: "form-control",
-                              attrs: { type: "text" },
+                              class: {
+                                input: true,
+                                "is-danger": _vm.errors.has("email")
+                              },
+                              attrs: { name: "email", required: "" },
                               domProps: { value: _vm.fillItem.email },
                               on: {
                                 input: function($event) {
@@ -55082,16 +55284,39 @@ var render = function() {
                                   )
                                 }
                               }
-                            })
+                            }),
+                            _vm._v(" "),
+                            _c(
+                              "span",
+                              {
+                                directives: [
+                                  {
+                                    name: "show",
+                                    rawName: "v-show",
+                                    value: _vm.errors.has("email"),
+                                    expression: "errors.has('email')"
+                                  }
+                                ],
+                                staticClass: "text-danger",
+                                staticStyle: { color: "red" }
+                              },
+                              [_vm._v(_vm._s(_vm.errors.first("email")))]
+                            )
                           ])
                         ]),
                         _vm._v(" "),
                         _c("div", { staticClass: "col-lg-12" }, [
                           _c("div", { staticClass: "form-group" }, [
-                            _c("label", [_vm._v("Telephone")]),
+                            _vm._m(7),
                             _vm._v(" "),
                             _c("input", {
                               directives: [
+                                {
+                                  name: "validate",
+                                  rawName: "v-validate",
+                                  value: "required",
+                                  expression: "'required'"
+                                },
                                 {
                                   name: "model",
                                   rawName: "v-model",
@@ -55100,7 +55325,11 @@ var render = function() {
                                 }
                               ],
                               staticClass: "form-control",
-                              attrs: { type: "text" },
+                              class: {
+                                input: true,
+                                "is-danger": _vm.errors.has("telephone")
+                              },
+                              attrs: { name: "telephone", type: "text" },
                               domProps: { value: _vm.fillItem.telephone },
                               on: {
                                 input: function($event) {
@@ -55114,7 +55343,35 @@ var render = function() {
                                   )
                                 }
                               }
-                            })
+                            }),
+                            _vm._v(" "),
+                            _c("i", {
+                              directives: [
+                                {
+                                  name: "show",
+                                  rawName: "v-show",
+                                  value: _vm.errors.has("telephone"),
+                                  expression: "errors.has('telephone')"
+                                }
+                              ],
+                              staticClass: "fa fa-warning"
+                            }),
+                            _vm._v(" "),
+                            _c(
+                              "span",
+                              {
+                                directives: [
+                                  {
+                                    name: "show",
+                                    rawName: "v-show",
+                                    value: _vm.errors.has("telephone"),
+                                    expression: "errors.has('telephone')"
+                                  }
+                                ],
+                                staticStyle: { color: "red" }
+                              },
+                              [_vm._v(_vm._s(_vm.errors.first("telephone")))]
+                            )
                           ])
                         ]),
                         _vm._v(" "),
@@ -55123,29 +55380,67 @@ var render = function() {
                             "div",
                             { staticClass: "form-group" },
                             [
-                              _c("label", [_vm._v("Date de naissance")]),
+                              _vm._m(8),
+                              _vm._v(" "),
+                              _c("flat-pickr", {
+                                directives: [
+                                  {
+                                    name: "validate",
+                                    rawName: "v-validate",
+                                    value: "required|date_format:YYYY-MM-DD",
+                                    expression:
+                                      "'required|date_format:YYYY-MM-DD'"
+                                  }
+                                ],
+                                staticClass: "form-control",
+                                class: {
+                                  input: true,
+                                  "is-danger": _vm.errors.has("date")
+                                },
+                                attrs: {
+                                  name: "date",
+                                  config: _vm.config,
+                                  placeholder: "Choisissez une date"
+                                },
+                                model: {
+                                  value: _vm.fillItem.date_naissance,
+                                  callback: function($$v) {
+                                    _vm.$set(
+                                      _vm.fillItem,
+                                      "date_naissance",
+                                      $$v
+                                    )
+                                  },
+                                  expression: "fillItem.date_naissance"
+                                }
+                              }),
+                              _vm._v(" "),
+                              _c("i", {
+                                directives: [
+                                  {
+                                    name: "show",
+                                    rawName: "v-show",
+                                    value: _vm.errors.has("date"),
+                                    expression: "errors.has('date')"
+                                  }
+                                ],
+                                staticClass: "fa fa-warning"
+                              }),
                               _vm._v(" "),
                               _c(
-                                "flat-pickr",
+                                "span",
                                 {
-                                  staticClass: "form-control",
-                                  attrs: {
-                                    config: _vm.config,
-                                    placeholder: "Choisissez une date"
-                                  },
-                                  model: {
-                                    value: _vm.fillItem.date_naissance,
-                                    callback: function($$v) {
-                                      _vm.$set(
-                                        _vm.fillItem,
-                                        "date_naissance",
-                                        $$v
-                                      )
-                                    },
-                                    expression: "fillItem.date_naissance"
-                                  }
+                                  directives: [
+                                    {
+                                      name: "show",
+                                      rawName: "v-show",
+                                      value: _vm.errors.has("date"),
+                                      expression: "errors.has('date')"
+                                    }
+                                  ],
+                                  staticStyle: { color: "red" }
                                 },
-                                [_c("i", { staticClass: "icon-calendar" })]
+                                [_vm._v(_vm._s(_vm.errors.first("date")))]
                               )
                             ],
                             1
@@ -55153,7 +55448,7 @@ var render = function() {
                         ])
                       ]),
                       _vm._v(" "),
-                      _vm._m(6)
+                      _vm._m(9)
                     ]
                   )
                 ])
@@ -55251,6 +55546,33 @@ var staticRenderFns = [
         },
         [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
       )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("label", [
+      _vm._v("Email: "),
+      _c("span", { staticClass: "required" }, [_vm._v("*")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("label", [
+      _vm._v("Telephone: "),
+      _c("span", { staticClass: "required" }, [_vm._v("*")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("label", [
+      _vm._v("Date de naissance: "),
+      _c("span", { staticClass: "required" }, [_vm._v("*")])
     ])
   },
   function() {
