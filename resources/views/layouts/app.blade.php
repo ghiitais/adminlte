@@ -46,7 +46,7 @@
                                         Annuaire
                                     </a>
                                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                        <a class="dropdown-item" href="#">Services</a>
+                                        <a class="dropdown-item" href="{{url('/services')}}">Services</a>
                                         <a class="dropdown-item" href="{{url('/collaborateurs')}}">Collaborateurs</a>
 
                                     </div>

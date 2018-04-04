@@ -5,11 +5,9 @@
         </div>
 
                 <form v-on:submit="saveForm()">
-                    <div class="row">
-                        <div class="col-xs-12 form-group">
+                    <div class="row col-lg-12 form-group">
                             <label class="control-label">Titre</label>
                             <input type="text" v-model="article.titre" class="form-control">
-                        </div>
                     </div>
                     <div class="row">
                         <div class="col-xs-12 form-group">

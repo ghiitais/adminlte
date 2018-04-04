@@ -23,6 +23,7 @@ class CreateCollaborateursTable extends Migration
             $table->string('email')->unique();
             $table->string('telephone');
             $table->string('adresse');
+            $table->string('nom_service')->nullable();
             $table->timestamps();
         });
     }

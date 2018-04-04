@@ -1,13 +1,15 @@
 <template>
     <div>
-        <h3>{{ article.titre }}</h3>
-        <div>
-            <froalaView v-model="article.contenu"></froalaView>
-        </div>
+        <h3> <strong>{{ article.titre }} </strong> </h3>
+        <br>
         <div>
             <img :src="'http://localhost:8000/'+article.image" style="display:block;" width="80%" height="80%" class="img"/>
 
         </div>
+        <div>
+            <froalaView v-model="article.contenu"></froalaView>
+        </div>
+
         <br/>
         <span class="glyphicon glyphicon-arrow-left"></span>
         <router-link to="/"> Back to actualités </router-link>

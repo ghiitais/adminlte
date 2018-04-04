@@ -24,3 +24,6 @@ Route::get('actualites', 'ArticlesController@home');
 
 Route::resource('vue-collaborateurs', 'CollaborateurController');
 Route::get('collaborateurs', 'CollaborateurController@home');
+
+Route::resource('vue-services', 'ServiceController');
+Route::get('services', 'ServiceController@home');

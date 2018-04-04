@@ -1,9 +1,6 @@
 <template>
     <div class="container">
-
-        <div class="row pt-5">
-
-            <div class="col-lg-12 d-flex justify-content-end pb-2">
+            <div class="col-lg-12 justify-content-end pb-2 mt-10">
                 <button type="button" @click="ajouterBtn()" class="btn btn-success" data-toggle="modal" data-target="#create-item" >
                     Ajouter collaborateur <i class="fa fa-plus" aria-hidden="true"></i>
                 </button>
@@ -12,7 +9,7 @@
 
 
             <div v-for="collaborateur in collaborateurs" class="col-lg-4">
-                <div class="card mb-3">
+                <div class="card mb-3 mt-2">
                     <img class="card-img-top" :src="'http://localhost:8000/'+collaborateur.image" alt="Card image cap">
                     <div class="card-body">
                         <h4 class="card-title">{{ collaborateur.nom }} {{collaborateur.prenom}}</h4>
@@ -53,7 +50,7 @@
                                 <div class="col-lg-12">
                                     <div class="form-group">
                                         <label>Nom: </label> <span class="required">*</span>
-                                        <input name= "nom" type="text" v-validate= "'required|alpha'" :class="{'input': true, 'is-danger': errors.has('nom') }" class="form-control" v-model="newItem.nom">
+                                        <input name= "nom" type="text" v-validate= "'required|alpha_spaces'" :class="{'input': true, 'is-danger': errors.has('nom') }" class="form-control" v-model="newItem.nom">
                                         <i v-show="errors.has('nom')" class="fa fa-warning"></i>
                                         <span v-show="errors.has('nom')" class="" style="color: red">{{ errors.first('nom') }}</span>
                                     </div>
@@ -62,7 +59,7 @@
                                 <div class="col-lg-12">
                                     <div class="form-group">
                                         <label>Prenom: </label> <span class="required">*</span>
-                                        <input name= "prenom" type="text" v-validate= "'required|alpha'" :class="{'input': true, 'is-danger': errors.has('prenom') }" class="form-control" v-model="newItem.prenom">
+                                        <input name= "prenom" type="text" v-validate= "'required|alpha_spaces'" :class="{'input': true, 'is-danger': errors.has('prenom') }" class="form-control" v-model="newItem.prenom">
                                         <i v-show="errors.has('prenom')" class="fa fa-warning"></i>
                                         <span v-show="errors.has('prenom')" class="" style="color: red">{{ errors.first('prenom') }}</span>
                                     </div>
@@ -80,7 +77,7 @@
                                 <div class="col-lg-12">
                                     <div class="form-group">
                                             <label>Post: </label> <span class="required">*</span>
-                                            <input name= "post" type="text" v-validate= "'required|alpha'" :class="{'input': true, 'is-danger': errors.has('post') }" class="form-control" v-model="newItem.post">
+                                            <input name= "post" type="text" v-validate= "'required|alpha_spaces'" :class="{'input': true, 'is-danger': errors.has('post') }" class="form-control" v-model="newItem.post">
                                             <i v-show="errors.has('post')" class="fa fa-warning"></i>
                                             <span v-show="errors.has('post')" class="" style="color: red">{{ errors.first('post') }}</span>
                                         </div>
@@ -104,7 +101,7 @@
                                 <div class="col-lg-12">
                                     <div class="form-group">
                                         <label>Date de naissance: <span class="required">*</span> </label>
-                                        <flat-pickr name="date"  :class="{'input': true, 'is-danger': errors.has('date') }" v-validate="'required|date_format:YYYY-MM-DD'" :config="config" placeholder="Choisissez une date"  class="form-control" v-model="newItem.date_naissance"> </flat-pickr>
+                                        <input type="date"  :class="{'input': true, 'is-danger': errors.has('date') }" v-validate="'required|date_format:YYYY-MM-DD'" placeholder="Choisissez une date"  class="form-control" v-model="newItem.date_naissance">
                                         <i v-show="errors.has('date')" class="fa fa-warning"></i>
                                         <span v-show="errors.has('date')" class="" style="color: red">{{ errors.first('date') }}</span>
                                     </div>
@@ -143,7 +140,7 @@
                                 <div class="col-lg-12">
                                     <div class="form-group">
                                         <label>Nom: </label> <span class="required">*</span>
-                                        <input name= "nom" type="text" v-validate= "'required|alpha'" :class="{'input': true, 'is-danger': errors.has('nom') }" class="form-control" v-model="fillItem.nom">
+                                        <input name= "nom" type="text" v-validate= "'required|alpha_spaces'" :class="{'input': true, 'is-danger': errors.has('nom') }" class="form-control" v-model="fillItem.nom">
                                         <i v-show="errors.has('nom')" class="fa fa-warning"></i>
                                         <span v-show="errors.has('nom')" class="" style="color: red">{{ errors.first('nom') }}</span>
                                     </div>
@@ -152,7 +149,7 @@
                                 <div class="col-lg-12">
                                     <div class="form-group">
                                         <label>Prenom: </label> <span class="required">*</span>
-                                        <input name= "prenom" type="text" v-validate= "'required|alpha'" :class="{'input': true, 'is-danger': errors.has('prenom') }" class="form-control" v-model="fillItem.prenom">
+                                        <input name= "prenom" type="text" v-validate= "'required|alpha_spaces'" :class="{'input': true, 'is-danger': errors.has('prenom') }" class="form-control" v-model="fillItem.prenom">
                                         <i v-show="errors.has('prenom')" class="fa fa-warning"></i>
                                         <span v-show="errors.has('prenom')" class="" style="color: red">{{ errors.first('prenom') }}</span>
                                     </div>
@@ -170,7 +167,7 @@
                                 <div class="col-lg-12">
                                     <div class="form-group">
                                         <label>Post: </label> <span class="required">*</span>
-                                        <input name= "post" type="text" v-validate= "'required|alpha'" :class="{'input': true, 'is-danger': errors.has('post') }" class="form-control" v-model="fillItem.post">
+                                        <input name= "post" type="text" v-validate= "'required|alpha_spaces'" :class="{'input': true, 'is-danger': errors.has('post') }" class="form-control" v-model="fillItem.post">
                                         <i v-show="errors.has('post')" class="fa fa-warning"></i>
                                         <span v-show="errors.has('post')" class="" style="color: red">{{ errors.first('post') }}</span>
                                     </div>
@@ -194,7 +191,7 @@
                                 <div class="col-lg-12">
                                     <div class="form-group">
                                         <label>Date de naissance: <span class="required">*</span> </label>
-                                        <flat-pickr name="date"  :class="{'input': true, 'is-danger': errors.has('date') }" v-validate="'required|date_format:YYYY-MM-DD'" :config="config" placeholder="Choisissez une date"  class="form-control" v-model="fillItem.date_naissance"> </flat-pickr>
+                                        <input type="date"  :class="{'input': true, 'is-danger': errors.has('date') }" v-validate="'required|date_format:YYYY-MM-DD'" placeholder="Choisissez une date"  class="form-control" v-model="fillItem.date_naissance">
                                         <i v-show="errors.has('date')" class="fa fa-warning"></i>
                                         <span v-show="errors.has('date')" class="" style="color: red">{{ errors.first('date') }}</span>
                                     </div>
@@ -210,12 +207,11 @@
             </div>
 
         </div>
-    </div>
+
 </template>
 
 <script>
-    import flatPickr from 'vue-flatpickr-component';
-    import 'flatpickr/dist/flatpickr.css';
+
     export default {
 
         data(){
@@ -225,17 +221,11 @@
                 newItem: { 'nom': '', 'prenom': '', 'image': '', 'post': '', 'date_naissance': '', 'email':'', 'telephone': '', 'adresse': '', 'image': '' },
                 fillItem: { 'nom': '', 'prenom': '', 'image': '', 'post': '', 'date_naissance': '', 'email':'', 'telephone': '', 'adresse': '' , 'image': '','id': ''},
                 collaborateurs: [],
-                date: new Date(),
-                config: {
-                    dateFormat: 'Y-m-d',
 
-                },
 
             }
         },
-        components: {
-            flatPickr
-        },
+
 
         mounted() {
             this.getCollaborateurs();

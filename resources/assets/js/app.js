@@ -29,6 +29,8 @@ Vue.use(VeeValidate);
 
 
 Vue.component('collaborateurs', require('./components/Collaborateurs'));
+Vue.component('services', require('./components/Services'));
+
 
 import ArticlesIndex from './components/ArticlesIndex';
 import ArticlesCreate from './components/ArticlesCreate';

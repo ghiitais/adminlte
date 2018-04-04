@@ -2,7 +2,7 @@
 <template>
     <div>
         <div class="form-group">
-            <router-link :to="{name: 'createArticle'}" class="btn btn-success">Ajouter article</router-link>
+            <router-link :to="{name: 'createArticle'}" class="btn btn-success">Ajouter article <i class="fa fa-plus" aria-hidden="true"></i></router-link>
         </div>
                 <div class="table-responsive">
                 <table class="table table-bordered table-striped">
@@ -19,9 +19,10 @@
                     </thead>
                     <tbody>
                     <tr v-for="article, index in articles">
-                        <td>{{ article.titre }}</td>
-                        <td> <div v-html="article.contenu.slice(0,20)+'...'"></div> </td>
-                        <td><img style="display:block;" width="40" height="40"  :src="'http://localhost:8000/'+article.image" class="img"/></td>
+                        <td> <router-link :to="{name: 'showArticle', params: {id: article.id}}">  <strong> {{ article.titre }} </strong>  </router-link> </td>
+
+                        <td> <div v-html="article.contenu.slice(0,70)+'...'"></div> </td>
+                        <td><img style="display:block;" width="200" height="200"  :src="'http://localhost:8000/'+article.image" class="img"/></td>
                         <td>{{article.created_at}}</td>
                         <td>{{article.updated_at}}</td>
                         <td>
