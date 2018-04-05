@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Service;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ServiceController extends Controller
 {
@@ -12,6 +13,8 @@ class ServiceController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+
    public function home() {
        return view('services');
    }
@@ -19,7 +22,7 @@ class ServiceController extends Controller
     public function index()
     {
         $services = Service::orderBy('created_at', 'DESC')->get();
-  return $services;
+        return $services;
     }
 
     /**
@@ -53,6 +56,8 @@ class ServiceController extends Controller
             'service'    => $service,
             'message' => 'Success'
         ], 200);
+
+
     }
 
     /**

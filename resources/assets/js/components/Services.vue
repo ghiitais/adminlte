@@ -129,6 +129,7 @@
                 axios.get('vue-services').then( response => {
 
                     this.services = response.data;
+                    console.log(this.services);
                 })
             },
             createService() {

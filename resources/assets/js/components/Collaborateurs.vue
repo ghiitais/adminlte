@@ -9,7 +9,7 @@
 
 
             <div v-for="collaborateur in collaborateurs" class="col-lg-4">
-                <div class="card mb-3 mt-2">
+                <div class="card mb-3">
                     <img class="card-img-top" :src="'http://localhost:8000/'+collaborateur.image" alt="Card image cap">
                     <div class="card-body">
                         <h4 class="card-title">{{ collaborateur.nom }} {{collaborateur.prenom}}</h4>
@@ -18,6 +18,8 @@
                         <p class="card-text"> <strong> Post </strong> : {{ collaborateur.post }}</p>
                         <p class="card-text"> <strong> Adresse </strong>: {{ collaborateur.adresse }}</p>
                         <p class="card-text"> <strong> Date de naissance </strong>: {{ collaborateur.date_naissance }}</p>
+
+
 
 
                         <button type="button" class="btn btn-primary" @click.prevent="editCollaborateur( collaborateur )" ><i class="fa fa-pencil" aria-hidden="true"></i></button>
@@ -43,7 +45,7 @@
                                 <div class="col-lg-12">
                                     <div class="form-group">
                                         <label>Image: </label><span class="required">*</span>
-                                        <input required type="file" data-preview="#preview" @change="imageChangedOnCreate" :src="'http://localhost:8000/'+newItem.image"  class="form-control">
+                                        <input type="file" data-preview="#preview" @change="imageChangedOnCreate" :src="'http://localhost:8000/'+newItem.image"  class="form-control">
                                     </div>
                                 </div>
 
@@ -106,6 +108,14 @@
                                         <span v-show="errors.has('date')" class="" style="color: red">{{ errors.first('date') }}</span>
                                     </div>
                                 </div>
+
+                                <div class="col-lg-12">
+                                    <label>Service: </label> <span class="required">*</span>
+                                    <select class="form-control" v-model="service">
+                                        <option v-for="service in services" :value="service">
+                                            {{service.nom}} </option>
+                                    </select>
+                                </div>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -133,7 +143,7 @@
                                 <div class="col-lg-12">
                                     <div class="form-group">
                                         <label>Image: </label><span class="required">*</span>
-                                        <input required type="file" data-preview="#preview" @change="imageChangedOnUpdate" :src="'http://localhost:8000/'+fillItem.image"  class="form-control">
+                                        <input type="file" data-preview="#preview" @change="imageChangedOnUpdate" :src="'http://localhost:8000/'+fillItem.image"  class="form-control">
                                     </div>
                                 </div>
 
@@ -196,6 +206,13 @@
                                         <span v-show="errors.has('date')" class="" style="color: red">{{ errors.first('date') }}</span>
                                     </div>
                                 </div>
+                                <div class="col-lg-12">
+                                    <label>Service: </label> <span class="required">*</span>
+                                    <select class="form-control" v-model="service">
+                                        <option v-for="service in services" :value="service">
+                                            {{service.nom}} </option>
+                                    </select>
+                                </div>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -218,38 +235,43 @@
 
             return {
 
-                newItem: { 'nom': '', 'prenom': '', 'image': '', 'post': '', 'date_naissance': '', 'email':'', 'telephone': '', 'adresse': '', 'image': '' },
-                fillItem: { 'nom': '', 'prenom': '', 'image': '', 'post': '', 'date_naissance': '', 'email':'', 'telephone': '', 'adresse': '' , 'image': '','id': ''},
+                newItem: { 'nom': '', 'prenom': '', 'image': '', 'post': '', 'date_naissance': '', 'email':'', 'telephone': '', 'adresse': '', 'image': '', 'service_id':''},
+                fillItem: { 'nom': '', 'prenom': '', 'image': '', 'post': '', 'date_naissance': '', 'email':'', 'telephone': '', 'adresse': '' , 'image': '','id': '', 'service_id':''},
                 collaborateurs: [],
-
+                service: {},
 
             }
         },
 
+        props: [
+            'services'
+        ],
 
         mounted() {
             this.getCollaborateurs();
+
         },
 
         methods: {
             getCollaborateurs() {
                 axios.get( 'vue-collaborateurs' ).then( response => {
-
                     this.collaborateurs = response.data;
                 })
             },
+
             createCollaborateur() {
                 let input = this.newItem;
 
+                input.service_id = this.service.id;
                 axios.post('vue-collaborateurs', input).then( (response) => {
 
                     this.collaborateurs.push(response.data);
-                    this.newItem = { 'nom': '', 'prenom': '', 'image': '', 'post': '', 'date_naissance': '', 'email':'', 'telephone': '', 'adresse': '' };
+                    this.newItem = { 'nom': '', 'prenom': '', 'image': '', 'post': '', 'date_naissance': '', 'email':'', 'telephone': '', 'adresse': '', 'service_id': '' };
                     $('#create-item').modal('hide');
                     this.getCollaborateurs();
 
                 }).catch( (error) => {
-                    //console.log( error.response.data )
+                    console.log(error);
                 })
             },
             editCollaborateur(collaborateur) {
@@ -264,16 +286,18 @@
                 edit.email = collaborateur.email;
                 edit.telephone = collaborateur.telephone;
                 edit.date_naissance = collaborateur.date_naissance;
+                edit.service_id = collaborateur.service_id;
 
                 $("#edit-item").modal('show');
             },
             updateCollaborateur(id){
                 let input = this.fillItem;
 
+                input.service_id = this.service.id;
                 axios.put('vue-collaborateurs/' + id, input).then( (response)=> {
 
                     this.getCollaborateurs();
-                    this.fillItem = { 'nom': '', 'prenom': '', 'image': '', 'post': '', 'date_naissance': '', 'email':'', 'telephone': '', 'adresse': '' , 'id': ''};
+                    this.fillItem = { 'nom': '', 'prenom': '', 'image': '', 'post': '', 'date_naissance': '', 'email':'', 'telephone': '', 'adresse': '' , 'id': '', 'service_id':''};
                     $('#edit-item').modal('hide');
 
                 }).catch( (error)=> {

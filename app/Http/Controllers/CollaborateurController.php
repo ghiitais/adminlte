@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Collaborateur;
+use App\Service;
 use Illuminate\Http\Request;
 
 class CollaborateurController extends Controller
@@ -20,7 +21,8 @@ class CollaborateurController extends Controller
 
     public function home() {
 
-        return view('collaborateurs');
+        $servicesResult = Service::all();
+        return view('collaborateurs', compact('servicesResult'));
     }
 
 
@@ -50,6 +52,7 @@ class CollaborateurController extends Controller
      */
     public function store(Request $request)
     {
+
     \Log::info($request->all());
     $exploded=explode(',',$request->image);
     $decoded=base64_decode($exploded[1]);
@@ -66,7 +69,8 @@ class CollaborateurController extends Controller
                     'image'=>$filename
                 ]);
 
-            return response()->json(['status' => 'success','msg'=>'post created successfully']);
+
+    return response()->json(['status' => 'success','msg'=>'post created successfully']);
 
     }
 

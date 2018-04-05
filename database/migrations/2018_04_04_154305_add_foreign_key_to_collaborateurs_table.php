@@ -16,6 +16,7 @@ class AddForeignKeyToCollaborateursTable extends Migration
         Schema::table('collaborateurs', function(Blueprint $table) {
             $table->foreign('service_id')->references('id')->on('services');
         });
+
     }
 
     /**
