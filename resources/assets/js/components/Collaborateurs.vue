@@ -245,7 +245,7 @@
                                 <div class="col-lg-12">
                                     <label>Service: </label> <span class="required">*</span>
                                     <select class="form-control" v-model="service">
-                                        <option v-for="service in services" :value="service">
+                                        <option  v-for="service in services" :value="service">
                                             {{service.nom}} </option>
                                     </select>
                                 </div>
@@ -271,8 +271,8 @@
 
             return {
 
-                newItem: { 'nom': '', 'prenom': '', 'image': '', 'post': '', 'date_naissance': '', 'email':'', 'telephone': '', 'adresse': '', 'image': '', 'service_id':''},
-                fillItem: { 'nom': '', 'prenom': '', 'image': '', 'post': '', 'date_naissance': '', 'email':'', 'telephone': '', 'adresse': '' , 'image': '','id': '', 'service_id':''},
+                newItem: { 'nom': '', 'prenom': '', 'image': '', 'post': '', 'date_naissance': '', 'email':'', 'telephone': '', 'adresse': '', 'image': '', 'service_id':'', 'service_nom':''},
+                fillItem: { 'nom': '', 'prenom': '', 'image': '', 'post': '', 'date_naissance': '', 'email':'', 'telephone': '', 'adresse': '' , 'image': '','id': '', 'service': {}, 'service_id': '', 'service_nom':''},
                 collaborateurs: [],
                 service: {},
 
@@ -301,6 +301,7 @@
                 let input = this.newItem;
 
                 input.service_id = this.service.id;
+
                 axios.post('vue-collaborateurs', input).then( (response) => {
 
                     this.collaborateurs.push(response.data);
@@ -324,8 +325,9 @@
                 edit.email = collaborateur.email;
                 edit.telephone = collaborateur.telephone;
                 edit.date_naissance = collaborateur.date_naissance;
-                edit.service_id = collaborateur.service_id;
+                edit.service_nom = collaborateur.service.nom;
 
+                console.log(edit.service_nom);
 
                 $("#edit-item").modal('show');
             },
@@ -333,11 +335,13 @@
                 let input = this.fillItem;
 
                 input.service_id = this.service.id;
+                input.service_nom = this.service.nom;
                 axios.put('vue-collaborateurs/' + id, input).then( (response)=> {
 
                     this.getCollaborateurs();
                     this.fillItem = { 'nom': '', 'prenom': '', 'image': '', 'post': '', 'date_naissance': '', 'email':'', 'telephone': '', 'adresse': '' , 'id': '', 'service_id': ''};
                     $('#edit-item').modal('hide');
+                    console.log(this.service.nom);
 
                 }).catch( (error)=> {
                     console.log( error.response.data )

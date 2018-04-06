@@ -51644,8 +51644,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
         return {
 
-            newItem: (_newItem = { 'nom': '', 'prenom': '', 'image': '', 'post': '', 'date_naissance': '', 'email': '', 'telephone': '', 'adresse': '' }, _defineProperty(_newItem, 'image', ''), _defineProperty(_newItem, 'service_id', ''), _newItem),
-            fillItem: (_fillItem = { 'nom': '', 'prenom': '', 'image': '', 'post': '', 'date_naissance': '', 'email': '', 'telephone': '', 'adresse': '' }, _defineProperty(_fillItem, 'image', ''), _defineProperty(_fillItem, 'id', ''), _defineProperty(_fillItem, 'service_id', ''), _fillItem),
+            newItem: (_newItem = { 'nom': '', 'prenom': '', 'image': '', 'post': '', 'date_naissance': '', 'email': '', 'telephone': '', 'adresse': '' }, _defineProperty(_newItem, 'image', ''), _defineProperty(_newItem, 'service_id', ''), _defineProperty(_newItem, 'service_nom', ''), _newItem),
+            fillItem: (_fillItem = { 'nom': '', 'prenom': '', 'image': '', 'post': '', 'date_naissance': '', 'email': '', 'telephone': '', 'adresse': '' }, _defineProperty(_fillItem, 'image', ''), _defineProperty(_fillItem, 'id', ''), _defineProperty(_fillItem, 'service', {}), _defineProperty(_fillItem, 'service_id', ''), _defineProperty(_fillItem, 'service_nom', ''), _fillItem),
             collaborateurs: [],
             service: {}
 
@@ -51674,6 +51674,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             var input = this.newItem;
 
             input.service_id = this.service.id;
+
             axios.post('vue-collaborateurs', input).then(function (response) {
 
                 _this2.collaborateurs.push(response.data);
@@ -51696,7 +51697,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             edit.email = collaborateur.email;
             edit.telephone = collaborateur.telephone;
             edit.date_naissance = collaborateur.date_naissance;
-            edit.service_id = collaborateur.service_id;
+            edit.service_nom = collaborateur.service.nom;
+
+            console.log(edit.service_nom);
 
             $("#edit-item").modal('show');
         },
@@ -51706,11 +51709,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             var input = this.fillItem;
 
             input.service_id = this.service.id;
+            input.service_nom = this.service.nom;
             axios.put('vue-collaborateurs/' + id, input).then(function (response) {
 
                 _this3.getCollaborateurs();
                 _this3.fillItem = { 'nom': '', 'prenom': '', 'image': '', 'post': '', 'date_naissance': '', 'email': '', 'telephone': '', 'adresse': '', 'id': '', 'service_id': '' };
                 $('#edit-item').modal('hide');
+                console.log(_this3.service.nom);
             }).catch(function (error) {
                 console.log(error.response.data);
             });
