@@ -1,14 +1,47 @@
 <template>
     <div class="container">
             <div class="col-lg-12 justify-content-end pb-2 mt-10">
-                <button type="button" @click="ajouterBtn()" class="btn btn-success" data-toggle="modal" data-target="#create-item" >
+                <button type="button"  class="btn btn-success" data-toggle="modal" data-target="#create-item" >
                     Ajouter collaborateur <i class="fa fa-plus" aria-hidden="true"></i>
                 </button>
             </div>
 
+        <table class="table table-stripped table-bordered">
+            <thead>
+            <tr class="table-active">
+                <th scope="col">Photo</th>
+                <th scope="col">Nom et Prénom</th>
+                <th scope="col">Date de naissance</th>
+                <th scope="col">Email</th>
+                <th scope="col">Téléphone</th>
+                <th scope="col">Adresse</th>
+                <th scope="col">Post</th>
+                <th scope="col">Services</th>
+                <th scope="col">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-for="collaborateur in collaborateurs">
+                <td><img style="display:block;" width="80" height="80"  :src="'http://localhost:8000/'+collaborateur.image"/></td>
+                <td>{{collaborateur.nom}} {{collaborateur.prenom}}</td>
+                <td>{{collaborateur.date_naissance}}</td>
+                <td>{{collaborateur.email}}</td>
+                <td>{{collaborateur.telephone}}</td>
+                <td>{{collaborateur.adresse}}</td>
+                <td>{{collaborateur.post}}</td>
+                <td>{{ collaborateur.service.nom }}</td>
+                <td>
+                <button type="button" class="btn btn-warning mb-2" @click.prevent="editCollaborateur( collaborateur )" ><i class="fa fa-pencil" aria-hidden="true"></i> Modifier </button>
+                <button type="button" class="btn btn-danger" @click.prevent="deleteCollaborateur( collaborateur )"><i class="fa fa-trash" aria-hidden="true"></i> Supprimer </button>
+                </td>
+            </tr>
+            </tbody>
+
+        </table>
 
 
-            <div v-for="collaborateur in collaborateurs" class="col-lg-4">
+         <!--   <div v-for="collaborateur in collaborateurs" class="col-lg-4">
+
                 <div class="card mb-3">
                     <img class="card-img-top" :src="'http://localhost:8000/'+collaborateur.image" alt="Card image cap">
                     <div class="card-body">
@@ -18,15 +51,18 @@
                         <p class="card-text"> <strong> Post </strong> : {{ collaborateur.post }}</p>
                         <p class="card-text"> <strong> Adresse </strong>: {{ collaborateur.adresse }}</p>
                         <p class="card-text"> <strong> Date de naissance </strong>: {{ collaborateur.date_naissance }}</p>
-
-
+                        <p class="card-text"> <strong> Service  </strong>: {{ collaborateur.service.id }}</p>
+                        <p class="card-text"> <strong> service </strong>: {{ collaborateur.service.nom }}</p>
 
 
                         <button type="button" class="btn btn-primary" @click.prevent="editCollaborateur( collaborateur )" ><i class="fa fa-pencil" aria-hidden="true"></i></button>
                         <button type="button" class="btn btn-danger" @click.prevent="deleteCollaborateur( collaborateur )"><i class="fa fa-trash" aria-hidden="true"></i></button>
                     </div>
+
                 </div>
-            </div>
+            </div> -->
+
+
 
             <!-- Create Collab Modal -->
             <div class="modal fade" id="create-item" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
@@ -240,6 +276,7 @@
                 collaborateurs: [],
                 service: {},
 
+
             }
         },
 
@@ -256,6 +293,7 @@
             getCollaborateurs() {
                 axios.get( 'vue-collaborateurs' ).then( response => {
                     this.collaborateurs = response.data;
+
                 })
             },
 
@@ -266,7 +304,7 @@
                 axios.post('vue-collaborateurs', input).then( (response) => {
 
                     this.collaborateurs.push(response.data);
-                    this.newItem = { 'nom': '', 'prenom': '', 'image': '', 'post': '', 'date_naissance': '', 'email':'', 'telephone': '', 'adresse': '', 'service_id': '' };
+                    this.newItem = { 'nom': '', 'prenom': '', 'image': '', 'post': '', 'date_naissance': '', 'email':'', 'telephone': '', 'adresse': '', 'service_id': ''};
                     $('#create-item').modal('hide');
                     this.getCollaborateurs();
 
@@ -288,6 +326,7 @@
                 edit.date_naissance = collaborateur.date_naissance;
                 edit.service_id = collaborateur.service_id;
 
+
                 $("#edit-item").modal('show');
             },
             updateCollaborateur(id){
@@ -297,7 +336,7 @@
                 axios.put('vue-collaborateurs/' + id, input).then( (response)=> {
 
                     this.getCollaborateurs();
-                    this.fillItem = { 'nom': '', 'prenom': '', 'image': '', 'post': '', 'date_naissance': '', 'email':'', 'telephone': '', 'adresse': '' , 'id': '', 'service_id':''};
+                    this.fillItem = { 'nom': '', 'prenom': '', 'image': '', 'post': '', 'date_naissance': '', 'email':'', 'telephone': '', 'adresse': '' , 'id': '', 'service_id': ''};
                     $('#edit-item').modal('hide');
 
                 }).catch( (error)=> {
@@ -322,7 +361,7 @@
                 }
             },
             ajouterBtn(){
-                this.newItem = { 'nom': '', 'prenom': '', 'image': '', 'post': '', 'date_naissance': '', 'email':'', 'telephone': '', 'adresse': '' };
+                this.newItem = { 'nom': '', 'prenom': '', 'image': '', 'post': '', 'date_naissance': '', 'email':'', 'telephone': '', 'adresse': '', 'service_id': '' };
             },
             deleteCollaborateur( collaborateur ) {
                 let conf = confirm("Do you ready want to delete this collab?");
@@ -337,10 +376,14 @@
 </script>
 
 <style>
+    .card{
+        display: inline-block;
+    }
     .card-img-top {
         width: 100%;
         height: 15vw;
         object-fit: cover;
+
     }
     .required {
         color: red;

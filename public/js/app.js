@@ -11661,7 +11661,7 @@ function updateLink (link, options, obj) {
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* WEBPACK VAR INJECTION */(function(global) {/**!
  * @fileOverview Kickass library to create and place poppers near their reference elements.
- * @version 1.14.2
+ * @version 1.14.3
  * @license
  * Copyright (c) 2016 Federico Zivolo and contributors
  *
@@ -12546,27 +12546,6 @@ function runModifiers(modifiers, data, ends) {
 }
 
 /**
- * Get the prefixed supported property name
- * @method
- * @memberof Popper.Utils
- * @argument {String} property (camelCase)
- * @returns {String} prefixed property (camelCase or PascalCase, depending on the vendor prefix)
- */
-function getSupportedPropertyName(property) {
-  var prefixes = [false, 'ms', 'Webkit', 'Moz', 'O'];
-  var upperProp = property.charAt(0).toUpperCase() + property.slice(1);
-
-  for (var i = 0; i < prefixes.length; i++) {
-    var prefix = prefixes[i];
-    var toCheck = prefix ? '' + prefix + upperProp : property;
-    if (typeof document.body.style[toCheck] !== 'undefined') {
-      return toCheck;
-    }
-  }
-  return null;
-}
-
-/**
  * Updates the position of the popper, computing the new offsets and applying
  * the new style.<br />
  * Prefer `scheduleUpdate` over `update` because of performance reasons.
@@ -12588,14 +12567,6 @@ function update() {
     offsets: {}
   };
 
-  // NOTE: DOM access here
-  // resets the popper's position so that the document size can be calculated excluding
-  // the size of the popper element itself
-  var popperStyles = this.popper.style;
-  popperStyles.top = '';
-  popperStyles.left = '';
-  popperStyles[getSupportedPropertyName('transform')] = '';
-
   // compute reference element offsets
   data.offsets.reference = getReferenceOffsets(this.state, this.popper, this.reference, this.options.positionFixed);
 
@@ -12611,6 +12582,7 @@ function update() {
 
   // compute the popper offsets
   data.offsets.popper = getPopperOffsets(this.popper, data.offsets.reference, data.placement);
+
   data.offsets.popper.position = this.options.positionFixed ? 'fixed' : 'absolute';
 
   // run the modifiers
@@ -12638,6 +12610,27 @@ function isModifierEnabled(modifiers, modifierName) {
         enabled = _ref.enabled;
     return enabled && name === modifierName;
   });
+}
+
+/**
+ * Get the prefixed supported property name
+ * @method
+ * @memberof Popper.Utils
+ * @argument {String} property (camelCase)
+ * @returns {String} prefixed property (camelCase or PascalCase, depending on the vendor prefix)
+ */
+function getSupportedPropertyName(property) {
+  var prefixes = [false, 'ms', 'Webkit', 'Moz', 'O'];
+  var upperProp = property.charAt(0).toUpperCase() + property.slice(1);
+
+  for (var i = 0; i < prefixes.length; i++) {
+    var prefix = prefixes[i];
+    var toCheck = prefix ? '' + prefix + upperProp : property;
+    if (typeof document.body.style[toCheck] !== 'undefined') {
+      return toCheck;
+    }
+  }
+  return null;
 }
 
 /**
@@ -13457,7 +13450,27 @@ function preventOverflow(data, options) {
     boundariesElement = getOffsetParent(boundariesElement);
   }
 
+  // NOTE: DOM access here
+  // resets the popper's position so that the document size can be calculated excluding
+  // the size of the popper element itself
+  var transformProp = getSupportedPropertyName('transform');
+  var popperStyles = data.instance.popper.style; // assignment to help minification
+  var top = popperStyles.top,
+      left = popperStyles.left,
+      transform = popperStyles[transformProp];
+
+  popperStyles.top = '';
+  popperStyles.left = '';
+  popperStyles[transformProp] = '';
+
   var boundaries = getBoundaries(data.instance.popper, data.instance.reference, options.padding, boundariesElement, data.positionFixed);
+
+  // NOTE: DOM access here
+  // restores the original style properties after the offsets have been computed
+  popperStyles.top = top;
+  popperStyles.left = left;
+  popperStyles[transformProp] = transform;
+
   options.boundaries = boundaries;
 
   var order = options.priority;
@@ -51312,7 +51325,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\n.card-img-top {\n    width: 100%;\n    height: 15vw;\n    -o-object-fit: cover;\n       object-fit: cover;\n}\n.required {\n    color: red;\n}\n", ""]);
+exports.push([module.i, "\n.card{\n    display: inline-block;\n}\n.card-img-top {\n    width: 100%;\n    height: 15vw;\n    -o-object-fit: cover;\n       object-fit: cover;\n}\n.required {\n    color: red;\n}\n", ""]);
 
 // exports
 
@@ -51358,6 +51371,42 @@ module.exports = function listToStyles (parentId, list) {
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -51688,7 +51737,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             };
         },
         ajouterBtn: function ajouterBtn() {
-            this.newItem = { 'nom': '', 'prenom': '', 'image': '', 'post': '', 'date_naissance': '', 'email': '', 'telephone': '', 'adresse': '' };
+            this.newItem = { 'nom': '', 'prenom': '', 'image': '', 'post': '', 'date_naissance': '', 'email': '', 'telephone': '', 'adresse': '', 'service_id': '' };
         },
         deleteCollaborateur: function deleteCollaborateur(collaborateur) {
             var _this6 = this;
@@ -51711,83 +51760,50 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    { staticClass: "container" },
-    [
-      _c("div", { staticClass: "col-lg-12 justify-content-end pb-2 mt-10" }, [
-        _c(
-          "button",
-          {
-            staticClass: "btn btn-success",
-            attrs: {
-              type: "button",
-              "data-toggle": "modal",
-              "data-target": "#create-item"
-            },
-            on: {
-              click: function($event) {
-                _vm.ajouterBtn()
-              }
-            }
-          },
-          [
-            _vm._v("\n                Ajouter collaborateur "),
-            _c("i", {
-              staticClass: "fa fa-plus",
-              attrs: { "aria-hidden": "true" }
-            })
-          ]
-        )
-      ]),
+  return _c("div", { staticClass: "container" }, [
+    _vm._m(0),
+    _vm._v(" "),
+    _c("table", { staticClass: "table table-stripped table-bordered" }, [
+      _vm._m(1),
       _vm._v(" "),
-      _vm._l(_vm.collaborateurs, function(collaborateur) {
-        return _c("div", { staticClass: "col-lg-4" }, [
-          _c("div", { staticClass: "card mb-3" }, [
-            _c("img", {
-              staticClass: "card-img-top",
-              attrs: {
-                src: "http://localhost:8000/" + collaborateur.image,
-                alt: "Card image cap"
-              }
-            }),
+      _c(
+        "tbody",
+        _vm._l(_vm.collaborateurs, function(collaborateur) {
+          return _c("tr", [
+            _c("td", [
+              _c("img", {
+                staticStyle: { display: "block" },
+                attrs: {
+                  width: "80",
+                  height: "80",
+                  src: "http://localhost:8000/" + collaborateur.image
+                }
+              })
+            ]),
             _vm._v(" "),
-            _c("div", { staticClass: "card-body" }, [
-              _c("h4", { staticClass: "card-title" }, [
-                _vm._v(
-                  _vm._s(collaborateur.nom) + " " + _vm._s(collaborateur.prenom)
-                )
-              ]),
-              _vm._v(" "),
-              _c("p", { staticClass: "card-text" }, [
-                _c("strong", [_vm._v(" Email ")]),
-                _vm._v(" : " + _vm._s(collaborateur.email))
-              ]),
-              _vm._v(" "),
-              _c("p", { staticClass: "card-text" }, [
-                _c("strong", [_vm._v(" Tel ")]),
-                _vm._v(": " + _vm._s(collaborateur.telephone))
-              ]),
-              _vm._v(" "),
-              _c("p", { staticClass: "card-text" }, [
-                _c("strong", [_vm._v(" Post ")]),
-                _vm._v(" : " + _vm._s(collaborateur.post))
-              ]),
-              _vm._v(" "),
-              _c("p", { staticClass: "card-text" }, [
-                _c("strong", [_vm._v(" Adresse ")]),
-                _vm._v(": " + _vm._s(collaborateur.adresse))
-              ]),
-              _vm._v(" "),
-              _c("p", { staticClass: "card-text" }, [
-                _c("strong", [_vm._v(" Date de naissance ")]),
-                _vm._v(": " + _vm._s(collaborateur.date_naissance))
-              ]),
-              _vm._v(" "),
+            _c("td", [
+              _vm._v(
+                _vm._s(collaborateur.nom) + " " + _vm._s(collaborateur.prenom)
+              )
+            ]),
+            _vm._v(" "),
+            _c("td", [_vm._v(_vm._s(collaborateur.date_naissance))]),
+            _vm._v(" "),
+            _c("td", [_vm._v(_vm._s(collaborateur.email))]),
+            _vm._v(" "),
+            _c("td", [_vm._v(_vm._s(collaborateur.telephone))]),
+            _vm._v(" "),
+            _c("td", [_vm._v(_vm._s(collaborateur.adresse))]),
+            _vm._v(" "),
+            _c("td", [_vm._v(_vm._s(collaborateur.post))]),
+            _vm._v(" "),
+            _c("td", [_vm._v(_vm._s(collaborateur.service.nom))]),
+            _vm._v(" "),
+            _c("td", [
               _c(
                 "button",
                 {
-                  staticClass: "btn btn-primary",
+                  staticClass: "btn btn-warning mb-2",
                   attrs: { type: "button" },
                   on: {
                     click: function($event) {
@@ -51800,7 +51816,8 @@ var render = function() {
                   _c("i", {
                     staticClass: "fa fa-pencil",
                     attrs: { "aria-hidden": "true" }
-                  })
+                  }),
+                  _vm._v(" Modifier ")
                 ]
               ),
               _vm._v(" "),
@@ -51820,1244 +51837,1267 @@ var render = function() {
                   _c("i", {
                     staticClass: "fa fa-trash",
                     attrs: { "aria-hidden": "true" }
-                  })
+                  }),
+                  _vm._v(" Supprimer ")
                 ]
               )
             ])
           ])
-        ])
-      }),
-      _vm._v(" "),
-      _c(
-        "div",
-        {
-          staticClass: "modal fade",
-          attrs: {
-            id: "create-item",
-            tabindex: "-1",
-            role: "dialog",
-            "aria-labelledby": "exampleModalLabel",
-            "aria-hidden": "true",
-            "data-backdrop": "static",
-            "data-keyboard": "false"
-          }
-        },
-        [
-          _c(
-            "div",
-            { staticClass: "modal-dialog", attrs: { role: "document" } },
-            [
-              _c("div", { staticClass: "modal-content" }, [
-                _vm._m(0),
-                _vm._v(" "),
-                _c(
-                  "form",
-                  {
-                    attrs: { method: "post", enctype: "multipart/form-data" },
-                    on: {
-                      submit: function($event) {
-                        $event.preventDefault()
-                        return _vm.createCollaborateur($event)
-                      }
-                    }
-                  },
-                  [
-                    _c("div", { staticClass: "modal-body" }, [
-                      _c("div", { staticClass: "col-lg-12" }, [
-                        _c("div", { staticClass: "form-group" }, [
-                          _c("label", [_vm._v("Image: ")]),
-                          _c("span", { staticClass: "required" }, [
-                            _vm._v("*")
-                          ]),
-                          _vm._v(" "),
-                          _c("input", {
-                            staticClass: "form-control",
-                            attrs: {
-                              type: "file",
-                              "data-preview": "#preview",
-                              src: "http://localhost:8000/" + _vm.newItem.image
-                            },
-                            on: { change: _vm.imageChangedOnCreate }
-                          })
-                        ])
-                      ]),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "col-lg-12" }, [
-                        _c("div", { staticClass: "form-group" }, [
-                          _c("label", [_vm._v("Nom: ")]),
-                          _vm._v(" "),
-                          _c("span", { staticClass: "required" }, [
-                            _vm._v("*")
-                          ]),
-                          _vm._v(" "),
-                          _c("input", {
-                            directives: [
-                              {
-                                name: "validate",
-                                rawName: "v-validate",
-                                value: "required|alpha_spaces",
-                                expression: "'required|alpha_spaces'"
-                              },
-                              {
-                                name: "model",
-                                rawName: "v-model",
-                                value: _vm.newItem.nom,
-                                expression: "newItem.nom"
-                              }
-                            ],
-                            staticClass: "form-control",
-                            class: {
-                              input: true,
-                              "is-danger": _vm.errors.has("nom")
-                            },
-                            attrs: { name: "nom", type: "text" },
-                            domProps: { value: _vm.newItem.nom },
-                            on: {
-                              input: function($event) {
-                                if ($event.target.composing) {
-                                  return
-                                }
-                                _vm.$set(
-                                  _vm.newItem,
-                                  "nom",
-                                  $event.target.value
-                                )
-                              }
-                            }
-                          }),
-                          _vm._v(" "),
-                          _c("i", {
-                            directives: [
-                              {
-                                name: "show",
-                                rawName: "v-show",
-                                value: _vm.errors.has("nom"),
-                                expression: "errors.has('nom')"
-                              }
-                            ],
-                            staticClass: "fa fa-warning"
-                          }),
-                          _vm._v(" "),
-                          _c(
-                            "span",
-                            {
-                              directives: [
-                                {
-                                  name: "show",
-                                  rawName: "v-show",
-                                  value: _vm.errors.has("nom"),
-                                  expression: "errors.has('nom')"
-                                }
-                              ],
-                              staticStyle: { color: "red" }
-                            },
-                            [_vm._v(_vm._s(_vm.errors.first("nom")))]
-                          )
-                        ])
-                      ]),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "col-lg-12" }, [
-                        _c("div", { staticClass: "form-group" }, [
-                          _c("label", [_vm._v("Prenom: ")]),
-                          _vm._v(" "),
-                          _c("span", { staticClass: "required" }, [
-                            _vm._v("*")
-                          ]),
-                          _vm._v(" "),
-                          _c("input", {
-                            directives: [
-                              {
-                                name: "validate",
-                                rawName: "v-validate",
-                                value: "required|alpha_spaces",
-                                expression: "'required|alpha_spaces'"
-                              },
-                              {
-                                name: "model",
-                                rawName: "v-model",
-                                value: _vm.newItem.prenom,
-                                expression: "newItem.prenom"
-                              }
-                            ],
-                            staticClass: "form-control",
-                            class: {
-                              input: true,
-                              "is-danger": _vm.errors.has("prenom")
-                            },
-                            attrs: { name: "prenom", type: "text" },
-                            domProps: { value: _vm.newItem.prenom },
-                            on: {
-                              input: function($event) {
-                                if ($event.target.composing) {
-                                  return
-                                }
-                                _vm.$set(
-                                  _vm.newItem,
-                                  "prenom",
-                                  $event.target.value
-                                )
-                              }
-                            }
-                          }),
-                          _vm._v(" "),
-                          _c("i", {
-                            directives: [
-                              {
-                                name: "show",
-                                rawName: "v-show",
-                                value: _vm.errors.has("prenom"),
-                                expression: "errors.has('prenom')"
-                              }
-                            ],
-                            staticClass: "fa fa-warning"
-                          }),
-                          _vm._v(" "),
-                          _c(
-                            "span",
-                            {
-                              directives: [
-                                {
-                                  name: "show",
-                                  rawName: "v-show",
-                                  value: _vm.errors.has("prenom"),
-                                  expression: "errors.has('prenom')"
-                                }
-                              ],
-                              staticStyle: { color: "red" }
-                            },
-                            [_vm._v(_vm._s(_vm.errors.first("prenom")))]
-                          )
-                        ])
-                      ]),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "col-lg-12" }, [
-                        _c("div", { staticClass: "form-group" }, [
-                          _c("label", [_vm._v("Adresse: ")]),
-                          _vm._v(" "),
-                          _c("span", { staticClass: "required" }, [
-                            _vm._v("*")
-                          ]),
-                          _vm._v(" "),
-                          _c("input", {
-                            directives: [
-                              {
-                                name: "validate",
-                                rawName: "v-validate",
-                                value: "required",
-                                expression: "'required'"
-                              },
-                              {
-                                name: "model",
-                                rawName: "v-model",
-                                value: _vm.newItem.adresse,
-                                expression: "newItem.adresse"
-                              }
-                            ],
-                            staticClass: "form-control",
-                            class: {
-                              input: true,
-                              "is-danger": _vm.errors.has("adresse")
-                            },
-                            attrs: { name: "adresse", type: "text" },
-                            domProps: { value: _vm.newItem.adresse },
-                            on: {
-                              input: function($event) {
-                                if ($event.target.composing) {
-                                  return
-                                }
-                                _vm.$set(
-                                  _vm.newItem,
-                                  "adresse",
-                                  $event.target.value
-                                )
-                              }
-                            }
-                          }),
-                          _vm._v(" "),
-                          _c("i", {
-                            directives: [
-                              {
-                                name: "show",
-                                rawName: "v-show",
-                                value: _vm.errors.has("adresse"),
-                                expression: "errors.has('adresse')"
-                              }
-                            ],
-                            staticClass: "fa fa-warning"
-                          }),
-                          _vm._v(" "),
-                          _c(
-                            "span",
-                            {
-                              directives: [
-                                {
-                                  name: "show",
-                                  rawName: "v-show",
-                                  value: _vm.errors.has("adresse"),
-                                  expression: "errors.has('adresse')"
-                                }
-                              ],
-                              staticStyle: { color: "red" }
-                            },
-                            [_vm._v(_vm._s(_vm.errors.first("adresse")))]
-                          )
-                        ])
-                      ]),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "col-lg-12" }, [
-                        _c("div", { staticClass: "form-group" }, [
-                          _c("label", [_vm._v("Post: ")]),
-                          _vm._v(" "),
-                          _c("span", { staticClass: "required" }, [
-                            _vm._v("*")
-                          ]),
-                          _vm._v(" "),
-                          _c("input", {
-                            directives: [
-                              {
-                                name: "validate",
-                                rawName: "v-validate",
-                                value: "required|alpha_spaces",
-                                expression: "'required|alpha_spaces'"
-                              },
-                              {
-                                name: "model",
-                                rawName: "v-model",
-                                value: _vm.newItem.post,
-                                expression: "newItem.post"
-                              }
-                            ],
-                            staticClass: "form-control",
-                            class: {
-                              input: true,
-                              "is-danger": _vm.errors.has("post")
-                            },
-                            attrs: { name: "post", type: "text" },
-                            domProps: { value: _vm.newItem.post },
-                            on: {
-                              input: function($event) {
-                                if ($event.target.composing) {
-                                  return
-                                }
-                                _vm.$set(
-                                  _vm.newItem,
-                                  "post",
-                                  $event.target.value
-                                )
-                              }
-                            }
-                          }),
-                          _vm._v(" "),
-                          _c("i", {
-                            directives: [
-                              {
-                                name: "show",
-                                rawName: "v-show",
-                                value: _vm.errors.has("post"),
-                                expression: "errors.has('post')"
-                              }
-                            ],
-                            staticClass: "fa fa-warning"
-                          }),
-                          _vm._v(" "),
-                          _c(
-                            "span",
-                            {
-                              directives: [
-                                {
-                                  name: "show",
-                                  rawName: "v-show",
-                                  value: _vm.errors.has("post"),
-                                  expression: "errors.has('post')"
-                                }
-                              ],
-                              staticStyle: { color: "red" }
-                            },
-                            [_vm._v(_vm._s(_vm.errors.first("post")))]
-                          )
-                        ])
-                      ]),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "col-lg-12" }, [
-                        _c("div", { staticClass: "form-group" }, [
-                          _vm._m(1),
-                          _vm._v(" "),
-                          _c("input", {
-                            directives: [
-                              {
-                                name: "model",
-                                rawName: "v-model",
-                                value: _vm.newItem.email,
-                                expression: "newItem.email"
-                              },
-                              {
-                                name: "validate",
-                                rawName: "v-validate",
-                                value: "required|email",
-                                expression: "'required|email'"
-                              }
-                            ],
-                            staticClass: "form-control",
-                            class: {
-                              input: true,
-                              "is-danger": _vm.errors.has("email")
-                            },
-                            attrs: { name: "email", required: "" },
-                            domProps: { value: _vm.newItem.email },
-                            on: {
-                              input: function($event) {
-                                if ($event.target.composing) {
-                                  return
-                                }
-                                _vm.$set(
-                                  _vm.newItem,
-                                  "email",
-                                  $event.target.value
-                                )
-                              }
-                            }
-                          }),
-                          _vm._v(" "),
-                          _c(
-                            "span",
-                            {
-                              directives: [
-                                {
-                                  name: "show",
-                                  rawName: "v-show",
-                                  value: _vm.errors.has("email"),
-                                  expression: "errors.has('email')"
-                                }
-                              ],
-                              staticClass: "text-danger",
-                              staticStyle: { color: "red" }
-                            },
-                            [_vm._v(_vm._s(_vm.errors.first("email")))]
-                          )
-                        ])
-                      ]),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "col-lg-12" }, [
-                        _c("div", { staticClass: "form-group" }, [
-                          _vm._m(2),
-                          _vm._v(" "),
-                          _c("input", {
-                            directives: [
-                              {
-                                name: "validate",
-                                rawName: "v-validate",
-                                value: "required",
-                                expression: "'required'"
-                              },
-                              {
-                                name: "model",
-                                rawName: "v-model",
-                                value: _vm.newItem.telephone,
-                                expression: "newItem.telephone"
-                              }
-                            ],
-                            staticClass: "form-control",
-                            class: {
-                              input: true,
-                              "is-danger": _vm.errors.has("telephone")
-                            },
-                            attrs: { name: "telephone", type: "text" },
-                            domProps: { value: _vm.newItem.telephone },
-                            on: {
-                              input: function($event) {
-                                if ($event.target.composing) {
-                                  return
-                                }
-                                _vm.$set(
-                                  _vm.newItem,
-                                  "telephone",
-                                  $event.target.value
-                                )
-                              }
-                            }
-                          }),
-                          _vm._v(" "),
-                          _c("i", {
-                            directives: [
-                              {
-                                name: "show",
-                                rawName: "v-show",
-                                value: _vm.errors.has("telephone"),
-                                expression: "errors.has('telephone')"
-                              }
-                            ],
-                            staticClass: "fa fa-warning"
-                          }),
-                          _vm._v(" "),
-                          _c(
-                            "span",
-                            {
-                              directives: [
-                                {
-                                  name: "show",
-                                  rawName: "v-show",
-                                  value: _vm.errors.has("telephone"),
-                                  expression: "errors.has('telephone')"
-                                }
-                              ],
-                              staticStyle: { color: "red" }
-                            },
-                            [_vm._v(_vm._s(_vm.errors.first("telephone")))]
-                          )
-                        ])
-                      ]),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "col-lg-12" }, [
-                        _c("div", { staticClass: "form-group" }, [
-                          _vm._m(3),
-                          _vm._v(" "),
-                          _c("input", {
-                            directives: [
-                              {
-                                name: "validate",
-                                rawName: "v-validate",
-                                value: "required|date_format:YYYY-MM-DD",
-                                expression: "'required|date_format:YYYY-MM-DD'"
-                              },
-                              {
-                                name: "model",
-                                rawName: "v-model",
-                                value: _vm.newItem.date_naissance,
-                                expression: "newItem.date_naissance"
-                              }
-                            ],
-                            staticClass: "form-control",
-                            class: {
-                              input: true,
-                              "is-danger": _vm.errors.has("date")
-                            },
-                            attrs: {
-                              type: "date",
-                              placeholder: "Choisissez une date"
-                            },
-                            domProps: { value: _vm.newItem.date_naissance },
-                            on: {
-                              input: function($event) {
-                                if ($event.target.composing) {
-                                  return
-                                }
-                                _vm.$set(
-                                  _vm.newItem,
-                                  "date_naissance",
-                                  $event.target.value
-                                )
-                              }
-                            }
-                          }),
-                          _vm._v(" "),
-                          _c("i", {
-                            directives: [
-                              {
-                                name: "show",
-                                rawName: "v-show",
-                                value: _vm.errors.has("date"),
-                                expression: "errors.has('date')"
-                              }
-                            ],
-                            staticClass: "fa fa-warning"
-                          }),
-                          _vm._v(" "),
-                          _c(
-                            "span",
-                            {
-                              directives: [
-                                {
-                                  name: "show",
-                                  rawName: "v-show",
-                                  value: _vm.errors.has("date"),
-                                  expression: "errors.has('date')"
-                                }
-                              ],
-                              staticStyle: { color: "red" }
-                            },
-                            [_vm._v(_vm._s(_vm.errors.first("date")))]
-                          )
-                        ])
-                      ]),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "col-lg-12" }, [
-                        _c("label", [_vm._v("Service: ")]),
-                        _vm._v(" "),
-                        _c("span", { staticClass: "required" }, [_vm._v("*")]),
-                        _vm._v(" "),
-                        _c(
-                          "select",
-                          {
-                            directives: [
-                              {
-                                name: "model",
-                                rawName: "v-model",
-                                value: _vm.service,
-                                expression: "service"
-                              }
-                            ],
-                            staticClass: "form-control",
-                            on: {
-                              change: function($event) {
-                                var $$selectedVal = Array.prototype.filter
-                                  .call($event.target.options, function(o) {
-                                    return o.selected
-                                  })
-                                  .map(function(o) {
-                                    var val = "_value" in o ? o._value : o.value
-                                    return val
-                                  })
-                                _vm.service = $event.target.multiple
-                                  ? $$selectedVal
-                                  : $$selectedVal[0]
-                              }
-                            }
-                          },
-                          _vm._l(_vm.services, function(service) {
-                            return _c(
-                              "option",
-                              { domProps: { value: service } },
-                              [
-                                _vm._v(
-                                  "\n                                        " +
-                                    _vm._s(service.nom) +
-                                    " "
-                                )
-                              ]
-                            )
-                          })
-                        )
-                      ])
-                    ]),
-                    _vm._v(" "),
-                    _vm._m(4)
-                  ]
-                )
-              ])
-            ]
-          )
-        ]
-      ),
-      _vm._v(" "),
-      _c(
-        "div",
-        {
-          staticClass: "modal fade",
-          attrs: {
-            id: "edit-item",
-            tabindex: "-1",
-            role: "dialog",
-            "aria-labelledby": "exampleModalLabel",
-            "aria-hidden": "true",
-            "data-backdrop": "static",
-            "data-keyboard": "false"
-          }
-        },
-        [
-          _c(
-            "div",
-            { staticClass: "modal-dialog", attrs: { role: "document" } },
-            [
-              _c("div", { staticClass: "modal-content" }, [
-                _vm._m(5),
-                _vm._v(" "),
-                _c(
-                  "form",
-                  {
-                    attrs: { method: "post", enctype: "multipart/form-data" },
-                    on: {
-                      submit: function($event) {
-                        $event.preventDefault()
-                        _vm.updateCollaborateur(_vm.fillItem.id)
-                      }
-                    }
-                  },
-                  [
-                    _c("input", {
-                      attrs: { type: "hidden", name: "_method", value: "PUT" }
-                    }),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "modal-body" }, [
-                      _c("div", { staticClass: "col-lg-12" }, [
-                        _c("div", { staticClass: "form-group" }, [
-                          _c("label", [_vm._v("Image: ")]),
-                          _c("span", { staticClass: "required" }, [
-                            _vm._v("*")
-                          ]),
-                          _vm._v(" "),
-                          _c("input", {
-                            staticClass: "form-control",
-                            attrs: {
-                              type: "file",
-                              "data-preview": "#preview",
-                              src: "http://localhost:8000/" + _vm.fillItem.image
-                            },
-                            on: { change: _vm.imageChangedOnUpdate }
-                          })
-                        ])
-                      ]),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "col-lg-12" }, [
-                        _c("div", { staticClass: "form-group" }, [
-                          _c("label", [_vm._v("Nom: ")]),
-                          _vm._v(" "),
-                          _c("span", { staticClass: "required" }, [
-                            _vm._v("*")
-                          ]),
-                          _vm._v(" "),
-                          _c("input", {
-                            directives: [
-                              {
-                                name: "validate",
-                                rawName: "v-validate",
-                                value: "required|alpha_spaces",
-                                expression: "'required|alpha_spaces'"
-                              },
-                              {
-                                name: "model",
-                                rawName: "v-model",
-                                value: _vm.fillItem.nom,
-                                expression: "fillItem.nom"
-                              }
-                            ],
-                            staticClass: "form-control",
-                            class: {
-                              input: true,
-                              "is-danger": _vm.errors.has("nom")
-                            },
-                            attrs: { name: "nom", type: "text" },
-                            domProps: { value: _vm.fillItem.nom },
-                            on: {
-                              input: function($event) {
-                                if ($event.target.composing) {
-                                  return
-                                }
-                                _vm.$set(
-                                  _vm.fillItem,
-                                  "nom",
-                                  $event.target.value
-                                )
-                              }
-                            }
-                          }),
-                          _vm._v(" "),
-                          _c("i", {
-                            directives: [
-                              {
-                                name: "show",
-                                rawName: "v-show",
-                                value: _vm.errors.has("nom"),
-                                expression: "errors.has('nom')"
-                              }
-                            ],
-                            staticClass: "fa fa-warning"
-                          }),
-                          _vm._v(" "),
-                          _c(
-                            "span",
-                            {
-                              directives: [
-                                {
-                                  name: "show",
-                                  rawName: "v-show",
-                                  value: _vm.errors.has("nom"),
-                                  expression: "errors.has('nom')"
-                                }
-                              ],
-                              staticStyle: { color: "red" }
-                            },
-                            [_vm._v(_vm._s(_vm.errors.first("nom")))]
-                          )
-                        ])
-                      ]),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "col-lg-12" }, [
-                        _c("div", { staticClass: "form-group" }, [
-                          _c("label", [_vm._v("Prenom: ")]),
-                          _vm._v(" "),
-                          _c("span", { staticClass: "required" }, [
-                            _vm._v("*")
-                          ]),
-                          _vm._v(" "),
-                          _c("input", {
-                            directives: [
-                              {
-                                name: "validate",
-                                rawName: "v-validate",
-                                value: "required|alpha_spaces",
-                                expression: "'required|alpha_spaces'"
-                              },
-                              {
-                                name: "model",
-                                rawName: "v-model",
-                                value: _vm.fillItem.prenom,
-                                expression: "fillItem.prenom"
-                              }
-                            ],
-                            staticClass: "form-control",
-                            class: {
-                              input: true,
-                              "is-danger": _vm.errors.has("prenom")
-                            },
-                            attrs: { name: "prenom", type: "text" },
-                            domProps: { value: _vm.fillItem.prenom },
-                            on: {
-                              input: function($event) {
-                                if ($event.target.composing) {
-                                  return
-                                }
-                                _vm.$set(
-                                  _vm.fillItem,
-                                  "prenom",
-                                  $event.target.value
-                                )
-                              }
-                            }
-                          }),
-                          _vm._v(" "),
-                          _c("i", {
-                            directives: [
-                              {
-                                name: "show",
-                                rawName: "v-show",
-                                value: _vm.errors.has("prenom"),
-                                expression: "errors.has('prenom')"
-                              }
-                            ],
-                            staticClass: "fa fa-warning"
-                          }),
-                          _vm._v(" "),
-                          _c(
-                            "span",
-                            {
-                              directives: [
-                                {
-                                  name: "show",
-                                  rawName: "v-show",
-                                  value: _vm.errors.has("prenom"),
-                                  expression: "errors.has('prenom')"
-                                }
-                              ],
-                              staticStyle: { color: "red" }
-                            },
-                            [_vm._v(_vm._s(_vm.errors.first("prenom")))]
-                          )
-                        ])
-                      ]),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "col-lg-12" }, [
-                        _c("div", { staticClass: "form-group" }, [
-                          _c("label", [_vm._v("Adresse: ")]),
-                          _vm._v(" "),
-                          _c("span", { staticClass: "required" }, [
-                            _vm._v("*")
-                          ]),
-                          _vm._v(" "),
-                          _c("input", {
-                            directives: [
-                              {
-                                name: "validate",
-                                rawName: "v-validate",
-                                value: "required",
-                                expression: "'required'"
-                              },
-                              {
-                                name: "model",
-                                rawName: "v-model",
-                                value: _vm.fillItem.adresse,
-                                expression: "fillItem.adresse"
-                              }
-                            ],
-                            staticClass: "form-control",
-                            class: {
-                              input: true,
-                              "is-danger": _vm.errors.has("adresse")
-                            },
-                            attrs: { name: "adresse", type: "text" },
-                            domProps: { value: _vm.fillItem.adresse },
-                            on: {
-                              input: function($event) {
-                                if ($event.target.composing) {
-                                  return
-                                }
-                                _vm.$set(
-                                  _vm.fillItem,
-                                  "adresse",
-                                  $event.target.value
-                                )
-                              }
-                            }
-                          }),
-                          _vm._v(" "),
-                          _c("i", {
-                            directives: [
-                              {
-                                name: "show",
-                                rawName: "v-show",
-                                value: _vm.errors.has("adresse"),
-                                expression: "errors.has('adresse')"
-                              }
-                            ],
-                            staticClass: "fa fa-warning"
-                          }),
-                          _vm._v(" "),
-                          _c(
-                            "span",
-                            {
-                              directives: [
-                                {
-                                  name: "show",
-                                  rawName: "v-show",
-                                  value: _vm.errors.has("adresse"),
-                                  expression: "errors.has('adresse')"
-                                }
-                              ],
-                              staticStyle: { color: "red" }
-                            },
-                            [_vm._v(_vm._s(_vm.errors.first("adresse")))]
-                          )
-                        ])
-                      ]),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "col-lg-12" }, [
-                        _c("div", { staticClass: "form-group" }, [
-                          _c("label", [_vm._v("Post: ")]),
-                          _vm._v(" "),
-                          _c("span", { staticClass: "required" }, [
-                            _vm._v("*")
-                          ]),
-                          _vm._v(" "),
-                          _c("input", {
-                            directives: [
-                              {
-                                name: "validate",
-                                rawName: "v-validate",
-                                value: "required|alpha_spaces",
-                                expression: "'required|alpha_spaces'"
-                              },
-                              {
-                                name: "model",
-                                rawName: "v-model",
-                                value: _vm.fillItem.post,
-                                expression: "fillItem.post"
-                              }
-                            ],
-                            staticClass: "form-control",
-                            class: {
-                              input: true,
-                              "is-danger": _vm.errors.has("post")
-                            },
-                            attrs: { name: "post", type: "text" },
-                            domProps: { value: _vm.fillItem.post },
-                            on: {
-                              input: function($event) {
-                                if ($event.target.composing) {
-                                  return
-                                }
-                                _vm.$set(
-                                  _vm.fillItem,
-                                  "post",
-                                  $event.target.value
-                                )
-                              }
-                            }
-                          }),
-                          _vm._v(" "),
-                          _c("i", {
-                            directives: [
-                              {
-                                name: "show",
-                                rawName: "v-show",
-                                value: _vm.errors.has("post"),
-                                expression: "errors.has('post')"
-                              }
-                            ],
-                            staticClass: "fa fa-warning"
-                          }),
-                          _vm._v(" "),
-                          _c(
-                            "span",
-                            {
-                              directives: [
-                                {
-                                  name: "show",
-                                  rawName: "v-show",
-                                  value: _vm.errors.has("post"),
-                                  expression: "errors.has('post')"
-                                }
-                              ],
-                              staticStyle: { color: "red" }
-                            },
-                            [_vm._v(_vm._s(_vm.errors.first("post")))]
-                          )
-                        ])
-                      ]),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "col-lg-12" }, [
-                        _c("div", { staticClass: "form-group" }, [
-                          _vm._m(6),
-                          _vm._v(" "),
-                          _c("input", {
-                            directives: [
-                              {
-                                name: "model",
-                                rawName: "v-model",
-                                value: _vm.fillItem.email,
-                                expression: "fillItem.email"
-                              },
-                              {
-                                name: "validate",
-                                rawName: "v-validate",
-                                value: "required|email",
-                                expression: "'required|email'"
-                              }
-                            ],
-                            staticClass: "form-control",
-                            class: {
-                              input: true,
-                              "is-danger": _vm.errors.has("email")
-                            },
-                            attrs: { name: "email", required: "" },
-                            domProps: { value: _vm.fillItem.email },
-                            on: {
-                              input: function($event) {
-                                if ($event.target.composing) {
-                                  return
-                                }
-                                _vm.$set(
-                                  _vm.fillItem,
-                                  "email",
-                                  $event.target.value
-                                )
-                              }
-                            }
-                          }),
-                          _vm._v(" "),
-                          _c(
-                            "span",
-                            {
-                              directives: [
-                                {
-                                  name: "show",
-                                  rawName: "v-show",
-                                  value: _vm.errors.has("email"),
-                                  expression: "errors.has('email')"
-                                }
-                              ],
-                              staticClass: "text-danger",
-                              staticStyle: { color: "red" }
-                            },
-                            [_vm._v(_vm._s(_vm.errors.first("email")))]
-                          )
-                        ])
-                      ]),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "col-lg-12" }, [
-                        _c("div", { staticClass: "form-group" }, [
-                          _vm._m(7),
-                          _vm._v(" "),
-                          _c("input", {
-                            directives: [
-                              {
-                                name: "validate",
-                                rawName: "v-validate",
-                                value: "required",
-                                expression: "'required'"
-                              },
-                              {
-                                name: "model",
-                                rawName: "v-model",
-                                value: _vm.fillItem.telephone,
-                                expression: "fillItem.telephone"
-                              }
-                            ],
-                            staticClass: "form-control",
-                            class: {
-                              input: true,
-                              "is-danger": _vm.errors.has("telephone")
-                            },
-                            attrs: { name: "telephone", type: "text" },
-                            domProps: { value: _vm.fillItem.telephone },
-                            on: {
-                              input: function($event) {
-                                if ($event.target.composing) {
-                                  return
-                                }
-                                _vm.$set(
-                                  _vm.fillItem,
-                                  "telephone",
-                                  $event.target.value
-                                )
-                              }
-                            }
-                          }),
-                          _vm._v(" "),
-                          _c("i", {
-                            directives: [
-                              {
-                                name: "show",
-                                rawName: "v-show",
-                                value: _vm.errors.has("telephone"),
-                                expression: "errors.has('telephone')"
-                              }
-                            ],
-                            staticClass: "fa fa-warning"
-                          }),
-                          _vm._v(" "),
-                          _c(
-                            "span",
-                            {
-                              directives: [
-                                {
-                                  name: "show",
-                                  rawName: "v-show",
-                                  value: _vm.errors.has("telephone"),
-                                  expression: "errors.has('telephone')"
-                                }
-                              ],
-                              staticStyle: { color: "red" }
-                            },
-                            [_vm._v(_vm._s(_vm.errors.first("telephone")))]
-                          )
-                        ])
-                      ]),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "col-lg-12" }, [
-                        _c("div", { staticClass: "form-group" }, [
-                          _vm._m(8),
-                          _vm._v(" "),
-                          _c("input", {
-                            directives: [
-                              {
-                                name: "validate",
-                                rawName: "v-validate",
-                                value: "required|date_format:YYYY-MM-DD",
-                                expression: "'required|date_format:YYYY-MM-DD'"
-                              },
-                              {
-                                name: "model",
-                                rawName: "v-model",
-                                value: _vm.fillItem.date_naissance,
-                                expression: "fillItem.date_naissance"
-                              }
-                            ],
-                            staticClass: "form-control",
-                            class: {
-                              input: true,
-                              "is-danger": _vm.errors.has("date")
-                            },
-                            attrs: {
-                              type: "date",
-                              placeholder: "Choisissez une date"
-                            },
-                            domProps: { value: _vm.fillItem.date_naissance },
-                            on: {
-                              input: function($event) {
-                                if ($event.target.composing) {
-                                  return
-                                }
-                                _vm.$set(
-                                  _vm.fillItem,
-                                  "date_naissance",
-                                  $event.target.value
-                                )
-                              }
-                            }
-                          }),
-                          _vm._v(" "),
-                          _c("i", {
-                            directives: [
-                              {
-                                name: "show",
-                                rawName: "v-show",
-                                value: _vm.errors.has("date"),
-                                expression: "errors.has('date')"
-                              }
-                            ],
-                            staticClass: "fa fa-warning"
-                          }),
-                          _vm._v(" "),
-                          _c(
-                            "span",
-                            {
-                              directives: [
-                                {
-                                  name: "show",
-                                  rawName: "v-show",
-                                  value: _vm.errors.has("date"),
-                                  expression: "errors.has('date')"
-                                }
-                              ],
-                              staticStyle: { color: "red" }
-                            },
-                            [_vm._v(_vm._s(_vm.errors.first("date")))]
-                          )
-                        ])
-                      ]),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "col-lg-12" }, [
-                        _c("label", [_vm._v("Service: ")]),
-                        _vm._v(" "),
-                        _c("span", { staticClass: "required" }, [_vm._v("*")]),
-                        _vm._v(" "),
-                        _c(
-                          "select",
-                          {
-                            directives: [
-                              {
-                                name: "model",
-                                rawName: "v-model",
-                                value: _vm.service,
-                                expression: "service"
-                              }
-                            ],
-                            staticClass: "form-control",
-                            on: {
-                              change: function($event) {
-                                var $$selectedVal = Array.prototype.filter
-                                  .call($event.target.options, function(o) {
-                                    return o.selected
-                                  })
-                                  .map(function(o) {
-                                    var val = "_value" in o ? o._value : o.value
-                                    return val
-                                  })
-                                _vm.service = $event.target.multiple
-                                  ? $$selectedVal
-                                  : $$selectedVal[0]
-                              }
-                            }
-                          },
-                          _vm._l(_vm.services, function(service) {
-                            return _c(
-                              "option",
-                              { domProps: { value: service } },
-                              [
-                                _vm._v(
-                                  "\n                                        " +
-                                    _vm._s(service.nom) +
-                                    " "
-                                )
-                              ]
-                            )
-                          })
-                        )
-                      ])
-                    ]),
-                    _vm._v(" "),
-                    _vm._m(9)
-                  ]
-                )
-              ])
-            ]
-          )
-        ]
+        })
       )
-    ],
-    2
-  )
+    ]),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "modal fade",
+        attrs: {
+          id: "create-item",
+          tabindex: "-1",
+          role: "dialog",
+          "aria-labelledby": "exampleModalLabel",
+          "aria-hidden": "true",
+          "data-backdrop": "static",
+          "data-keyboard": "false"
+        }
+      },
+      [
+        _c(
+          "div",
+          { staticClass: "modal-dialog", attrs: { role: "document" } },
+          [
+            _c("div", { staticClass: "modal-content" }, [
+              _vm._m(2),
+              _vm._v(" "),
+              _c(
+                "form",
+                {
+                  attrs: { method: "post", enctype: "multipart/form-data" },
+                  on: {
+                    submit: function($event) {
+                      $event.preventDefault()
+                      return _vm.createCollaborateur($event)
+                    }
+                  }
+                },
+                [
+                  _c("div", { staticClass: "modal-body" }, [
+                    _c("div", { staticClass: "col-lg-12" }, [
+                      _c("div", { staticClass: "form-group" }, [
+                        _c("label", [_vm._v("Image: ")]),
+                        _c("span", { staticClass: "required" }, [_vm._v("*")]),
+                        _vm._v(" "),
+                        _c("input", {
+                          staticClass: "form-control",
+                          attrs: {
+                            type: "file",
+                            "data-preview": "#preview",
+                            src: "http://localhost:8000/" + _vm.newItem.image
+                          },
+                          on: { change: _vm.imageChangedOnCreate }
+                        })
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col-lg-12" }, [
+                      _c("div", { staticClass: "form-group" }, [
+                        _c("label", [_vm._v("Nom: ")]),
+                        _vm._v(" "),
+                        _c("span", { staticClass: "required" }, [_vm._v("*")]),
+                        _vm._v(" "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "validate",
+                              rawName: "v-validate",
+                              value: "required|alpha_spaces",
+                              expression: "'required|alpha_spaces'"
+                            },
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.newItem.nom,
+                              expression: "newItem.nom"
+                            }
+                          ],
+                          staticClass: "form-control",
+                          class: {
+                            input: true,
+                            "is-danger": _vm.errors.has("nom")
+                          },
+                          attrs: { name: "nom", type: "text" },
+                          domProps: { value: _vm.newItem.nom },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(_vm.newItem, "nom", $event.target.value)
+                            }
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c("i", {
+                          directives: [
+                            {
+                              name: "show",
+                              rawName: "v-show",
+                              value: _vm.errors.has("nom"),
+                              expression: "errors.has('nom')"
+                            }
+                          ],
+                          staticClass: "fa fa-warning"
+                        }),
+                        _vm._v(" "),
+                        _c(
+                          "span",
+                          {
+                            directives: [
+                              {
+                                name: "show",
+                                rawName: "v-show",
+                                value: _vm.errors.has("nom"),
+                                expression: "errors.has('nom')"
+                              }
+                            ],
+                            staticStyle: { color: "red" }
+                          },
+                          [_vm._v(_vm._s(_vm.errors.first("nom")))]
+                        )
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col-lg-12" }, [
+                      _c("div", { staticClass: "form-group" }, [
+                        _c("label", [_vm._v("Prenom: ")]),
+                        _vm._v(" "),
+                        _c("span", { staticClass: "required" }, [_vm._v("*")]),
+                        _vm._v(" "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "validate",
+                              rawName: "v-validate",
+                              value: "required|alpha_spaces",
+                              expression: "'required|alpha_spaces'"
+                            },
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.newItem.prenom,
+                              expression: "newItem.prenom"
+                            }
+                          ],
+                          staticClass: "form-control",
+                          class: {
+                            input: true,
+                            "is-danger": _vm.errors.has("prenom")
+                          },
+                          attrs: { name: "prenom", type: "text" },
+                          domProps: { value: _vm.newItem.prenom },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(
+                                _vm.newItem,
+                                "prenom",
+                                $event.target.value
+                              )
+                            }
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c("i", {
+                          directives: [
+                            {
+                              name: "show",
+                              rawName: "v-show",
+                              value: _vm.errors.has("prenom"),
+                              expression: "errors.has('prenom')"
+                            }
+                          ],
+                          staticClass: "fa fa-warning"
+                        }),
+                        _vm._v(" "),
+                        _c(
+                          "span",
+                          {
+                            directives: [
+                              {
+                                name: "show",
+                                rawName: "v-show",
+                                value: _vm.errors.has("prenom"),
+                                expression: "errors.has('prenom')"
+                              }
+                            ],
+                            staticStyle: { color: "red" }
+                          },
+                          [_vm._v(_vm._s(_vm.errors.first("prenom")))]
+                        )
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col-lg-12" }, [
+                      _c("div", { staticClass: "form-group" }, [
+                        _c("label", [_vm._v("Adresse: ")]),
+                        _vm._v(" "),
+                        _c("span", { staticClass: "required" }, [_vm._v("*")]),
+                        _vm._v(" "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "validate",
+                              rawName: "v-validate",
+                              value: "required",
+                              expression: "'required'"
+                            },
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.newItem.adresse,
+                              expression: "newItem.adresse"
+                            }
+                          ],
+                          staticClass: "form-control",
+                          class: {
+                            input: true,
+                            "is-danger": _vm.errors.has("adresse")
+                          },
+                          attrs: { name: "adresse", type: "text" },
+                          domProps: { value: _vm.newItem.adresse },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(
+                                _vm.newItem,
+                                "adresse",
+                                $event.target.value
+                              )
+                            }
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c("i", {
+                          directives: [
+                            {
+                              name: "show",
+                              rawName: "v-show",
+                              value: _vm.errors.has("adresse"),
+                              expression: "errors.has('adresse')"
+                            }
+                          ],
+                          staticClass: "fa fa-warning"
+                        }),
+                        _vm._v(" "),
+                        _c(
+                          "span",
+                          {
+                            directives: [
+                              {
+                                name: "show",
+                                rawName: "v-show",
+                                value: _vm.errors.has("adresse"),
+                                expression: "errors.has('adresse')"
+                              }
+                            ],
+                            staticStyle: { color: "red" }
+                          },
+                          [_vm._v(_vm._s(_vm.errors.first("adresse")))]
+                        )
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col-lg-12" }, [
+                      _c("div", { staticClass: "form-group" }, [
+                        _c("label", [_vm._v("Post: ")]),
+                        _vm._v(" "),
+                        _c("span", { staticClass: "required" }, [_vm._v("*")]),
+                        _vm._v(" "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "validate",
+                              rawName: "v-validate",
+                              value: "required|alpha_spaces",
+                              expression: "'required|alpha_spaces'"
+                            },
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.newItem.post,
+                              expression: "newItem.post"
+                            }
+                          ],
+                          staticClass: "form-control",
+                          class: {
+                            input: true,
+                            "is-danger": _vm.errors.has("post")
+                          },
+                          attrs: { name: "post", type: "text" },
+                          domProps: { value: _vm.newItem.post },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(_vm.newItem, "post", $event.target.value)
+                            }
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c("i", {
+                          directives: [
+                            {
+                              name: "show",
+                              rawName: "v-show",
+                              value: _vm.errors.has("post"),
+                              expression: "errors.has('post')"
+                            }
+                          ],
+                          staticClass: "fa fa-warning"
+                        }),
+                        _vm._v(" "),
+                        _c(
+                          "span",
+                          {
+                            directives: [
+                              {
+                                name: "show",
+                                rawName: "v-show",
+                                value: _vm.errors.has("post"),
+                                expression: "errors.has('post')"
+                              }
+                            ],
+                            staticStyle: { color: "red" }
+                          },
+                          [_vm._v(_vm._s(_vm.errors.first("post")))]
+                        )
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col-lg-12" }, [
+                      _c("div", { staticClass: "form-group" }, [
+                        _vm._m(3),
+                        _vm._v(" "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.newItem.email,
+                              expression: "newItem.email"
+                            },
+                            {
+                              name: "validate",
+                              rawName: "v-validate",
+                              value: "required|email",
+                              expression: "'required|email'"
+                            }
+                          ],
+                          staticClass: "form-control",
+                          class: {
+                            input: true,
+                            "is-danger": _vm.errors.has("email")
+                          },
+                          attrs: { name: "email", required: "" },
+                          domProps: { value: _vm.newItem.email },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(
+                                _vm.newItem,
+                                "email",
+                                $event.target.value
+                              )
+                            }
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c(
+                          "span",
+                          {
+                            directives: [
+                              {
+                                name: "show",
+                                rawName: "v-show",
+                                value: _vm.errors.has("email"),
+                                expression: "errors.has('email')"
+                              }
+                            ],
+                            staticClass: "text-danger",
+                            staticStyle: { color: "red" }
+                          },
+                          [_vm._v(_vm._s(_vm.errors.first("email")))]
+                        )
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col-lg-12" }, [
+                      _c("div", { staticClass: "form-group" }, [
+                        _vm._m(4),
+                        _vm._v(" "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "validate",
+                              rawName: "v-validate",
+                              value: "required",
+                              expression: "'required'"
+                            },
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.newItem.telephone,
+                              expression: "newItem.telephone"
+                            }
+                          ],
+                          staticClass: "form-control",
+                          class: {
+                            input: true,
+                            "is-danger": _vm.errors.has("telephone")
+                          },
+                          attrs: { name: "telephone", type: "text" },
+                          domProps: { value: _vm.newItem.telephone },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(
+                                _vm.newItem,
+                                "telephone",
+                                $event.target.value
+                              )
+                            }
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c("i", {
+                          directives: [
+                            {
+                              name: "show",
+                              rawName: "v-show",
+                              value: _vm.errors.has("telephone"),
+                              expression: "errors.has('telephone')"
+                            }
+                          ],
+                          staticClass: "fa fa-warning"
+                        }),
+                        _vm._v(" "),
+                        _c(
+                          "span",
+                          {
+                            directives: [
+                              {
+                                name: "show",
+                                rawName: "v-show",
+                                value: _vm.errors.has("telephone"),
+                                expression: "errors.has('telephone')"
+                              }
+                            ],
+                            staticStyle: { color: "red" }
+                          },
+                          [_vm._v(_vm._s(_vm.errors.first("telephone")))]
+                        )
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col-lg-12" }, [
+                      _c("div", { staticClass: "form-group" }, [
+                        _vm._m(5),
+                        _vm._v(" "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "validate",
+                              rawName: "v-validate",
+                              value: "required|date_format:YYYY-MM-DD",
+                              expression: "'required|date_format:YYYY-MM-DD'"
+                            },
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.newItem.date_naissance,
+                              expression: "newItem.date_naissance"
+                            }
+                          ],
+                          staticClass: "form-control",
+                          class: {
+                            input: true,
+                            "is-danger": _vm.errors.has("date")
+                          },
+                          attrs: {
+                            type: "date",
+                            placeholder: "Choisissez une date"
+                          },
+                          domProps: { value: _vm.newItem.date_naissance },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(
+                                _vm.newItem,
+                                "date_naissance",
+                                $event.target.value
+                              )
+                            }
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c("i", {
+                          directives: [
+                            {
+                              name: "show",
+                              rawName: "v-show",
+                              value: _vm.errors.has("date"),
+                              expression: "errors.has('date')"
+                            }
+                          ],
+                          staticClass: "fa fa-warning"
+                        }),
+                        _vm._v(" "),
+                        _c(
+                          "span",
+                          {
+                            directives: [
+                              {
+                                name: "show",
+                                rawName: "v-show",
+                                value: _vm.errors.has("date"),
+                                expression: "errors.has('date')"
+                              }
+                            ],
+                            staticStyle: { color: "red" }
+                          },
+                          [_vm._v(_vm._s(_vm.errors.first("date")))]
+                        )
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col-lg-12" }, [
+                      _c("label", [_vm._v("Service: ")]),
+                      _vm._v(" "),
+                      _c("span", { staticClass: "required" }, [_vm._v("*")]),
+                      _vm._v(" "),
+                      _c(
+                        "select",
+                        {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.service,
+                              expression: "service"
+                            }
+                          ],
+                          staticClass: "form-control",
+                          on: {
+                            change: function($event) {
+                              var $$selectedVal = Array.prototype.filter
+                                .call($event.target.options, function(o) {
+                                  return o.selected
+                                })
+                                .map(function(o) {
+                                  var val = "_value" in o ? o._value : o.value
+                                  return val
+                                })
+                              _vm.service = $event.target.multiple
+                                ? $$selectedVal
+                                : $$selectedVal[0]
+                            }
+                          }
+                        },
+                        _vm._l(_vm.services, function(service) {
+                          return _c(
+                            "option",
+                            { domProps: { value: service } },
+                            [
+                              _vm._v(
+                                "\n                                        " +
+                                  _vm._s(service.nom) +
+                                  " "
+                              )
+                            ]
+                          )
+                        })
+                      )
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _vm._m(6)
+                ]
+              )
+            ])
+          ]
+        )
+      ]
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "modal fade",
+        attrs: {
+          id: "edit-item",
+          tabindex: "-1",
+          role: "dialog",
+          "aria-labelledby": "exampleModalLabel",
+          "aria-hidden": "true",
+          "data-backdrop": "static",
+          "data-keyboard": "false"
+        }
+      },
+      [
+        _c(
+          "div",
+          { staticClass: "modal-dialog", attrs: { role: "document" } },
+          [
+            _c("div", { staticClass: "modal-content" }, [
+              _vm._m(7),
+              _vm._v(" "),
+              _c(
+                "form",
+                {
+                  attrs: { method: "post", enctype: "multipart/form-data" },
+                  on: {
+                    submit: function($event) {
+                      $event.preventDefault()
+                      _vm.updateCollaborateur(_vm.fillItem.id)
+                    }
+                  }
+                },
+                [
+                  _c("input", {
+                    attrs: { type: "hidden", name: "_method", value: "PUT" }
+                  }),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "modal-body" }, [
+                    _c("div", { staticClass: "col-lg-12" }, [
+                      _c("div", { staticClass: "form-group" }, [
+                        _c("label", [_vm._v("Image: ")]),
+                        _c("span", { staticClass: "required" }, [_vm._v("*")]),
+                        _vm._v(" "),
+                        _c("input", {
+                          staticClass: "form-control",
+                          attrs: {
+                            type: "file",
+                            "data-preview": "#preview",
+                            src: "http://localhost:8000/" + _vm.fillItem.image
+                          },
+                          on: { change: _vm.imageChangedOnUpdate }
+                        })
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col-lg-12" }, [
+                      _c("div", { staticClass: "form-group" }, [
+                        _c("label", [_vm._v("Nom: ")]),
+                        _vm._v(" "),
+                        _c("span", { staticClass: "required" }, [_vm._v("*")]),
+                        _vm._v(" "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "validate",
+                              rawName: "v-validate",
+                              value: "required|alpha_spaces",
+                              expression: "'required|alpha_spaces'"
+                            },
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.fillItem.nom,
+                              expression: "fillItem.nom"
+                            }
+                          ],
+                          staticClass: "form-control",
+                          class: {
+                            input: true,
+                            "is-danger": _vm.errors.has("nom")
+                          },
+                          attrs: { name: "nom", type: "text" },
+                          domProps: { value: _vm.fillItem.nom },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(_vm.fillItem, "nom", $event.target.value)
+                            }
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c("i", {
+                          directives: [
+                            {
+                              name: "show",
+                              rawName: "v-show",
+                              value: _vm.errors.has("nom"),
+                              expression: "errors.has('nom')"
+                            }
+                          ],
+                          staticClass: "fa fa-warning"
+                        }),
+                        _vm._v(" "),
+                        _c(
+                          "span",
+                          {
+                            directives: [
+                              {
+                                name: "show",
+                                rawName: "v-show",
+                                value: _vm.errors.has("nom"),
+                                expression: "errors.has('nom')"
+                              }
+                            ],
+                            staticStyle: { color: "red" }
+                          },
+                          [_vm._v(_vm._s(_vm.errors.first("nom")))]
+                        )
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col-lg-12" }, [
+                      _c("div", { staticClass: "form-group" }, [
+                        _c("label", [_vm._v("Prenom: ")]),
+                        _vm._v(" "),
+                        _c("span", { staticClass: "required" }, [_vm._v("*")]),
+                        _vm._v(" "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "validate",
+                              rawName: "v-validate",
+                              value: "required|alpha_spaces",
+                              expression: "'required|alpha_spaces'"
+                            },
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.fillItem.prenom,
+                              expression: "fillItem.prenom"
+                            }
+                          ],
+                          staticClass: "form-control",
+                          class: {
+                            input: true,
+                            "is-danger": _vm.errors.has("prenom")
+                          },
+                          attrs: { name: "prenom", type: "text" },
+                          domProps: { value: _vm.fillItem.prenom },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(
+                                _vm.fillItem,
+                                "prenom",
+                                $event.target.value
+                              )
+                            }
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c("i", {
+                          directives: [
+                            {
+                              name: "show",
+                              rawName: "v-show",
+                              value: _vm.errors.has("prenom"),
+                              expression: "errors.has('prenom')"
+                            }
+                          ],
+                          staticClass: "fa fa-warning"
+                        }),
+                        _vm._v(" "),
+                        _c(
+                          "span",
+                          {
+                            directives: [
+                              {
+                                name: "show",
+                                rawName: "v-show",
+                                value: _vm.errors.has("prenom"),
+                                expression: "errors.has('prenom')"
+                              }
+                            ],
+                            staticStyle: { color: "red" }
+                          },
+                          [_vm._v(_vm._s(_vm.errors.first("prenom")))]
+                        )
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col-lg-12" }, [
+                      _c("div", { staticClass: "form-group" }, [
+                        _c("label", [_vm._v("Adresse: ")]),
+                        _vm._v(" "),
+                        _c("span", { staticClass: "required" }, [_vm._v("*")]),
+                        _vm._v(" "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "validate",
+                              rawName: "v-validate",
+                              value: "required",
+                              expression: "'required'"
+                            },
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.fillItem.adresse,
+                              expression: "fillItem.adresse"
+                            }
+                          ],
+                          staticClass: "form-control",
+                          class: {
+                            input: true,
+                            "is-danger": _vm.errors.has("adresse")
+                          },
+                          attrs: { name: "adresse", type: "text" },
+                          domProps: { value: _vm.fillItem.adresse },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(
+                                _vm.fillItem,
+                                "adresse",
+                                $event.target.value
+                              )
+                            }
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c("i", {
+                          directives: [
+                            {
+                              name: "show",
+                              rawName: "v-show",
+                              value: _vm.errors.has("adresse"),
+                              expression: "errors.has('adresse')"
+                            }
+                          ],
+                          staticClass: "fa fa-warning"
+                        }),
+                        _vm._v(" "),
+                        _c(
+                          "span",
+                          {
+                            directives: [
+                              {
+                                name: "show",
+                                rawName: "v-show",
+                                value: _vm.errors.has("adresse"),
+                                expression: "errors.has('adresse')"
+                              }
+                            ],
+                            staticStyle: { color: "red" }
+                          },
+                          [_vm._v(_vm._s(_vm.errors.first("adresse")))]
+                        )
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col-lg-12" }, [
+                      _c("div", { staticClass: "form-group" }, [
+                        _c("label", [_vm._v("Post: ")]),
+                        _vm._v(" "),
+                        _c("span", { staticClass: "required" }, [_vm._v("*")]),
+                        _vm._v(" "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "validate",
+                              rawName: "v-validate",
+                              value: "required|alpha_spaces",
+                              expression: "'required|alpha_spaces'"
+                            },
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.fillItem.post,
+                              expression: "fillItem.post"
+                            }
+                          ],
+                          staticClass: "form-control",
+                          class: {
+                            input: true,
+                            "is-danger": _vm.errors.has("post")
+                          },
+                          attrs: { name: "post", type: "text" },
+                          domProps: { value: _vm.fillItem.post },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(
+                                _vm.fillItem,
+                                "post",
+                                $event.target.value
+                              )
+                            }
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c("i", {
+                          directives: [
+                            {
+                              name: "show",
+                              rawName: "v-show",
+                              value: _vm.errors.has("post"),
+                              expression: "errors.has('post')"
+                            }
+                          ],
+                          staticClass: "fa fa-warning"
+                        }),
+                        _vm._v(" "),
+                        _c(
+                          "span",
+                          {
+                            directives: [
+                              {
+                                name: "show",
+                                rawName: "v-show",
+                                value: _vm.errors.has("post"),
+                                expression: "errors.has('post')"
+                              }
+                            ],
+                            staticStyle: { color: "red" }
+                          },
+                          [_vm._v(_vm._s(_vm.errors.first("post")))]
+                        )
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col-lg-12" }, [
+                      _c("div", { staticClass: "form-group" }, [
+                        _vm._m(8),
+                        _vm._v(" "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.fillItem.email,
+                              expression: "fillItem.email"
+                            },
+                            {
+                              name: "validate",
+                              rawName: "v-validate",
+                              value: "required|email",
+                              expression: "'required|email'"
+                            }
+                          ],
+                          staticClass: "form-control",
+                          class: {
+                            input: true,
+                            "is-danger": _vm.errors.has("email")
+                          },
+                          attrs: { name: "email", required: "" },
+                          domProps: { value: _vm.fillItem.email },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(
+                                _vm.fillItem,
+                                "email",
+                                $event.target.value
+                              )
+                            }
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c(
+                          "span",
+                          {
+                            directives: [
+                              {
+                                name: "show",
+                                rawName: "v-show",
+                                value: _vm.errors.has("email"),
+                                expression: "errors.has('email')"
+                              }
+                            ],
+                            staticClass: "text-danger",
+                            staticStyle: { color: "red" }
+                          },
+                          [_vm._v(_vm._s(_vm.errors.first("email")))]
+                        )
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col-lg-12" }, [
+                      _c("div", { staticClass: "form-group" }, [
+                        _vm._m(9),
+                        _vm._v(" "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "validate",
+                              rawName: "v-validate",
+                              value: "required",
+                              expression: "'required'"
+                            },
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.fillItem.telephone,
+                              expression: "fillItem.telephone"
+                            }
+                          ],
+                          staticClass: "form-control",
+                          class: {
+                            input: true,
+                            "is-danger": _vm.errors.has("telephone")
+                          },
+                          attrs: { name: "telephone", type: "text" },
+                          domProps: { value: _vm.fillItem.telephone },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(
+                                _vm.fillItem,
+                                "telephone",
+                                $event.target.value
+                              )
+                            }
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c("i", {
+                          directives: [
+                            {
+                              name: "show",
+                              rawName: "v-show",
+                              value: _vm.errors.has("telephone"),
+                              expression: "errors.has('telephone')"
+                            }
+                          ],
+                          staticClass: "fa fa-warning"
+                        }),
+                        _vm._v(" "),
+                        _c(
+                          "span",
+                          {
+                            directives: [
+                              {
+                                name: "show",
+                                rawName: "v-show",
+                                value: _vm.errors.has("telephone"),
+                                expression: "errors.has('telephone')"
+                              }
+                            ],
+                            staticStyle: { color: "red" }
+                          },
+                          [_vm._v(_vm._s(_vm.errors.first("telephone")))]
+                        )
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col-lg-12" }, [
+                      _c("div", { staticClass: "form-group" }, [
+                        _vm._m(10),
+                        _vm._v(" "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "validate",
+                              rawName: "v-validate",
+                              value: "required|date_format:YYYY-MM-DD",
+                              expression: "'required|date_format:YYYY-MM-DD'"
+                            },
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.fillItem.date_naissance,
+                              expression: "fillItem.date_naissance"
+                            }
+                          ],
+                          staticClass: "form-control",
+                          class: {
+                            input: true,
+                            "is-danger": _vm.errors.has("date")
+                          },
+                          attrs: {
+                            type: "date",
+                            placeholder: "Choisissez une date"
+                          },
+                          domProps: { value: _vm.fillItem.date_naissance },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(
+                                _vm.fillItem,
+                                "date_naissance",
+                                $event.target.value
+                              )
+                            }
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c("i", {
+                          directives: [
+                            {
+                              name: "show",
+                              rawName: "v-show",
+                              value: _vm.errors.has("date"),
+                              expression: "errors.has('date')"
+                            }
+                          ],
+                          staticClass: "fa fa-warning"
+                        }),
+                        _vm._v(" "),
+                        _c(
+                          "span",
+                          {
+                            directives: [
+                              {
+                                name: "show",
+                                rawName: "v-show",
+                                value: _vm.errors.has("date"),
+                                expression: "errors.has('date')"
+                              }
+                            ],
+                            staticStyle: { color: "red" }
+                          },
+                          [_vm._v(_vm._s(_vm.errors.first("date")))]
+                        )
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col-lg-12" }, [
+                      _c("label", [_vm._v("Service: ")]),
+                      _vm._v(" "),
+                      _c("span", { staticClass: "required" }, [_vm._v("*")]),
+                      _vm._v(" "),
+                      _c(
+                        "select",
+                        {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.service,
+                              expression: "service"
+                            }
+                          ],
+                          staticClass: "form-control",
+                          on: {
+                            change: function($event) {
+                              var $$selectedVal = Array.prototype.filter
+                                .call($event.target.options, function(o) {
+                                  return o.selected
+                                })
+                                .map(function(o) {
+                                  var val = "_value" in o ? o._value : o.value
+                                  return val
+                                })
+                              _vm.service = $event.target.multiple
+                                ? $$selectedVal
+                                : $$selectedVal[0]
+                            }
+                          }
+                        },
+                        _vm._l(_vm.services, function(service) {
+                          return _c(
+                            "option",
+                            { domProps: { value: service } },
+                            [
+                              _vm._v(
+                                "\n                                        " +
+                                  _vm._s(service.nom) +
+                                  " "
+                              )
+                            ]
+                          )
+                        })
+                      )
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _vm._m(11)
+                ]
+              )
+            ])
+          ]
+        )
+      ]
+    )
+  ])
 }
 var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      { staticClass: "col-lg-12 justify-content-end pb-2 mt-10" },
+      [
+        _c(
+          "button",
+          {
+            staticClass: "btn btn-success",
+            attrs: {
+              type: "button",
+              "data-toggle": "modal",
+              "data-target": "#create-item"
+            }
+          },
+          [
+            _vm._v("\n                Ajouter collaborateur "),
+            _c("i", {
+              staticClass: "fa fa-plus",
+              attrs: { "aria-hidden": "true" }
+            })
+          ]
+        )
+      ]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("tr", { staticClass: "table-active" }, [
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Photo")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Nom et Prénom")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Date de naissance")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Email")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Téléphone")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Adresse")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Post")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Services")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Actions")])
+      ])
+    ])
+  },
   function() {
     var _vm = this
     var _h = _vm.$createElement

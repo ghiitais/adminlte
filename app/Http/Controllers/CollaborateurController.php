@@ -28,7 +28,8 @@ class CollaborateurController extends Controller
 
     public function index()
     {
-        return Collaborateur::orderBy('created_at', 'DESC')->get();
+        return Collaborateur::with('service')->orderBy('created_at', 'DESC')->get();
+
         return response()->json([
             'collaborateurs' => $collaborateurs,
         ], 200);
