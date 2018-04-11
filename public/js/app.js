@@ -51678,6 +51678,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -51686,12 +51689,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
         return {
 
-            newItem: (_newItem = { 'nom': '', 'prenom': '', 'image': '', 'post': '', 'date_naissance': '', 'email': '', 'telephone': '', 'adresse': '' }, _defineProperty(_newItem, 'image', ''), _defineProperty(_newItem, 'service_id', ''), _defineProperty(_newItem, 'is_manager', ''), _defineProperty(_newItem, 'manager_id', ''), _newItem),
-            fillItem: (_fillItem = { 'nom': '', 'prenom': '', 'image': '', 'post': '', 'date_naissance': '', 'email': '', 'telephone': '', 'adresse': '' }, _defineProperty(_fillItem, 'image', ''), _defineProperty(_fillItem, 'id', ''), _defineProperty(_fillItem, 'service_id', ''), _defineProperty(_fillItem, 'is_manager', ''), _defineProperty(_fillItem, 'manager_id', ''), _fillItem),
+            newItem: (_newItem = { 'nom': '', 'prenom': '', 'image': '', 'post': '', 'date_naissance': '', 'email': '', 'telephone': '', 'adresse': '' }, _defineProperty(_newItem, 'image', ''), _defineProperty(_newItem, 'service_id', ''), _defineProperty(_newItem, 'is_manager', ''), _defineProperty(_newItem, 'manager_id', ''), _defineProperty(_newItem, 'service', {}), _defineProperty(_newItem, 'manager', {}), _newItem),
+            fillItem: (_fillItem = { 'nom': '', 'prenom': '', 'image': '', 'post': '', 'date_naissance': '', 'email': '', 'telephone': '', 'adresse': '' }, _defineProperty(_fillItem, 'image', ''), _defineProperty(_fillItem, 'id', ''), _defineProperty(_fillItem, 'service_id', ''), _defineProperty(_fillItem, 'is_manager', ''), _defineProperty(_fillItem, 'manager_id', ''), _defineProperty(_fillItem, 'service', {}), _defineProperty(_fillItem, 'service_nom', ''), _defineProperty(_fillItem, 'manager', {}), _fillItem),
             collaborateurs: [],
-            service: {},
-            manager: {},
-            managers: []
+            manager: {}
 
         };
     },
@@ -51701,7 +51702,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
     mounted: function mounted() {
         this.getCollaborateurs();
-        this.managers = managers;
     },
 
 
@@ -51717,21 +51717,21 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             var _this2 = this;
 
             var input = this.newItem;
-            input.service_id = this.service.id;
-
+            //input.service_id = this.service.id;
+            input.service_id = input.service.id;
             input.manager_id = this.manager.id;
 
             axios.post('vue-collaborateurs', input).then(function (response) {
-                console.log(input.manager_id);
+
                 _this2.collaborateurs.push(response.data);
-                _this2.newItem = { 'nom': '', 'prenom': '', 'image': '', 'post': '', 'date_naissance': '', 'email': '', 'telephone': '', 'adresse': '', 'service_id': '', 'service_nom': '', 'is_manager': '', 'manager_id': '' };
+                _this2.newItem = { 'nom': '', 'prenom': '', 'image': '', 'post': '', 'date_naissance': '', 'email': '', 'telephone': '', 'adresse': '', 'service_id': '', 'is_manager': '', 'manager_id': '', 'service': { 'id': '', 'nom': '', 'description': '' } };
                 $('#create-item').modal('hide');
                 _this2.getCollaborateurs();
             }).catch(function (error) {
                 console.log(error);
             });
         },
-        editCollaborateur: function editCollaborateur(collaborateur) {
+        editCollaborateur: function editCollaborateur(collaborateur, service, manager) {
             var edit = this.fillItem;
 
             edit.nom = collaborateur.nom;
@@ -51743,9 +51743,16 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             edit.email = collaborateur.email;
             edit.telephone = collaborateur.telephone;
             edit.date_naissance = collaborateur.date_naissance;
-            // edit.service_nom = collaborateur.service.nom;
-            // edit.manager_id = collaborateur.manager.id;
-            // edit.is_manager = collaborateur.manager.is_manager;
+
+            edit.service = service;
+            edit.service_id = service.id;
+            edit.is_manager = collaborateur.is_manager;
+            edit.manager = manager;
+            //edit.service_nom = service.nom;
+            //edit.manager_id = collaborateur.manager.id;
+
+
+            //edit.service_id = collaborateur.service_id;
 
 
             $("#edit-item").modal('show');
@@ -51755,13 +51762,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
             var input = this.fillItem;
 
-            input.service_id = this.service.id;
-            input.manager_id = this.manager.id;
+            input.service_id = input.service.id;
+            input.manager_id = input.manager.id;
 
             axios.put('vue-collaborateurs/' + id, input).then(function (response) {
 
                 _this3.getCollaborateurs();
-                _this3.fillItem = { 'nom': '', 'prenom': '', 'image': '', 'post': '', 'date_naissance': '', 'email': '', 'telephone': '', 'adresse': '', 'id': '', 'service_id': '', 'service_nom': '', 'manager_id': '', 'is_manager': '' };
+                _this3.fillItem = { 'nom': '', 'prenom': '', 'image': '', 'post': '', 'date_naissance': '', 'email': '', 'telephone': '', 'adresse': '', 'id': '', 'service_id': '', 'service_nom': '', 'manager_id': '', 'is_manager': '', 'service': { 'id': '', 'nom': '', 'description': '' } };
                 $('#edit-item').modal('hide');
             }).catch(function (error) {
                 console.log(error.response.data);
@@ -51868,7 +51875,11 @@ var render = function() {
                   on: {
                     click: function($event) {
                       $event.preventDefault()
-                      _vm.editCollaborateur(collaborateur)
+                      _vm.editCollaborateur(
+                        collaborateur,
+                        collaborateur.service,
+                        collaborateur.manager
+                      )
                     }
                   }
                 },
@@ -52454,8 +52465,8 @@ var render = function() {
                             {
                               name: "model",
                               rawName: "v-model",
-                              value: _vm.service,
-                              expression: "service"
+                              value: _vm.newItem.service,
+                              expression: "newItem.service"
                             }
                           ],
                           staticClass: "form-control",
@@ -52469,16 +52480,23 @@ var render = function() {
                                   var val = "_value" in o ? o._value : o.value
                                   return val
                                 })
-                              _vm.service = $event.target.multiple
-                                ? $$selectedVal
-                                : $$selectedVal[0]
+                              _vm.$set(
+                                _vm.newItem,
+                                "service",
+                                $event.target.multiple
+                                  ? $$selectedVal
+                                  : $$selectedVal[0]
+                              )
                             }
                           }
                         },
                         _vm._l(_vm.services, function(service) {
                           return _c(
                             "option",
-                            { domProps: { value: service } },
+                            {
+                              attrs: { selected: "" },
+                              domProps: { value: service }
+                            },
                             [
                               _vm._v(
                                 "\n                                        " +
@@ -53159,8 +53177,8 @@ var render = function() {
                             {
                               name: "model",
                               rawName: "v-model",
-                              value: _vm.service,
-                              expression: "service"
+                              value: _vm.fillItem.service,
+                              expression: "fillItem.service"
                             }
                           ],
                           staticClass: "form-control",
@@ -53174,9 +53192,13 @@ var render = function() {
                                   var val = "_value" in o ? o._value : o.value
                                   return val
                                 })
-                              _vm.service = $event.target.multiple
-                                ? $$selectedVal
-                                : $$selectedVal[0]
+                              _vm.$set(
+                                _vm.fillItem,
+                                "service",
+                                $event.target.multiple
+                                  ? $$selectedVal
+                                  : $$selectedVal[0]
+                              )
                             }
                           }
                         },
@@ -53258,8 +53280,8 @@ var render = function() {
                                   {
                                     name: "model",
                                     rawName: "v-model",
-                                    value: _vm.manager,
-                                    expression: "manager"
+                                    value: _vm.fillItem.manager,
+                                    expression: "fillItem.manager"
                                   }
                                 ],
                                 staticClass: "form-control",
@@ -53274,9 +53296,13 @@ var render = function() {
                                           "_value" in o ? o._value : o.value
                                         return val
                                       })
-                                    _vm.manager = $event.target.multiple
-                                      ? $$selectedVal
-                                      : $$selectedVal[0]
+                                    _vm.$set(
+                                      _vm.fillItem,
+                                      "manager",
+                                      $event.target.multiple
+                                        ? $$selectedVal
+                                        : $$selectedVal[0]
+                                    )
                                   }
                                 }
                               },
@@ -53287,9 +53313,7 @@ var render = function() {
                                   [
                                     _vm._v(
                                       "\n                                            " +
-                                        _vm._s(manager.nom) +
-                                        " " +
-                                        _vm._s(manager.prenom) +
+                                        _vm._s(manager.fullName) +
                                         " "
                                     )
                                   ]

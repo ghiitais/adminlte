@@ -35,7 +35,7 @@
 
 
                 <td>
-                <button type="button" class="btn btn-warning mb-2" @click.prevent="editCollaborateur( collaborateur )" ><i class="fa fa-pencil" aria-hidden="true"></i> Modifier </button>
+                <button type="button" class="btn btn-warning mb-2" @click.prevent="editCollaborateur( collaborateur, collaborateur.service, collaborateur.manager )" ><i class="fa fa-pencil" aria-hidden="true"></i> Modifier </button>
                 <button type="button" class="btn btn-danger" @click.prevent="deleteCollaborateur( collaborateur )"><i class="fa fa-trash" aria-hidden="true"></i> Supprimer </button>
                 </td>
             </tr>
@@ -151,14 +151,16 @@
 
                                 <div class="col-lg-12">
                                     <label>Service: </label> <span class="required">*</span>
-                                    <select class="form-control" v-model="service">
-                                        <option v-for="service in services" :value="service">
+                                    <select class="form-control" v-model="newItem.service">
+                                        <option selected v-for="service in services" :value="service">
                                             {{service.nom}} </option>
                                     </select>
+
                                 </div>
 
                                 <div class="col-lg-12">
                                     <div class="form-group">
+
                                         <span> Etes-vous un manager?</span>
                                         <input type="radio" name="radio" v-model="newItem.is_manager" value="1">
                                         <label> Oui </label>
@@ -172,6 +174,7 @@
                                             <option v-for="manager in managers" :value="manager">
                                                 {{manager.nom}} {{manager.prenom}} </option>
                                         </select>
+
                                     </div>
 
                                 </div>
@@ -267,8 +270,8 @@
                                 </div>
                                 <div class="col-lg-12">
                                     <label>Service: </label> <span class="required">*</span>
-                                    <select class="form-control" v-model="service">
-                                        <option  v-for="service in services" :value="service">
+                                    <select class="form-control" v-model="fillItem.service">
+                                        <option v-for="service in services" :value="service" >
                                             {{service.nom}} </option>
                                     </select>
                                 </div>
@@ -284,9 +287,9 @@
                                     </div>
                                     <div class="col-lg-12" v-if="fillItem.is_manager == '0'">
                                         <label>Choisissez votre manager: </label>
-                                        <select class="form-control" v-model="manager">
+                                        <select class="form-control" v-model="fillItem.manager">
                                             <option v-for="manager in managers" :value="manager">
-                                                {{manager.nom}} {{manager.prenom}} </option>
+                                                {{manager.fullName}} </option>
                                         </select>
                                     </div>
 
@@ -313,12 +316,11 @@
 
             return {
 
-                newItem: { 'nom': '', 'prenom': '', 'image': '', 'post': '', 'date_naissance': '', 'email':'', 'telephone': '', 'adresse': '', 'image': '', 'service_id':'', 'is_manager':'', 'manager_id':''},
-                fillItem: { 'nom': '', 'prenom': '', 'image': '', 'post': '', 'date_naissance': '', 'email':'', 'telephone': '', 'adresse': '' , 'image': '','id': '', 'service_id': '', 'is_manager':'', 'manager_id':''},
+                newItem: { 'nom': '', 'prenom': '', 'image': '', 'post': '', 'date_naissance': '', 'email':'', 'telephone': '', 'adresse': '', 'image': '', 'service_id':'', 'is_manager':'', 'manager_id':'', 'service':{}, 'manager': {}},
+                fillItem: { 'nom': '', 'prenom': '', 'image': '', 'post': '', 'date_naissance': '', 'email':'', 'telephone': '', 'adresse': '' , 'image': '','id': '', 'service_id': '', 'is_manager':'', 'manager_id':'', 'service':{}, 'service_nom':'', 'manager':{}},
                 collaborateurs: [],
-                service: {},
                 manager:{},
-                managers: []
+
 
             }
         },
@@ -327,7 +329,7 @@
 
         mounted() {
             this.getCollaborateurs();
-            this.managers = managers;
+
         },
 
         methods: {
@@ -340,14 +342,14 @@
 
             createCollaborateur() {
                 let input = this.newItem;
-                input.service_id = this.service.id;
-
+                //input.service_id = this.service.id;
+                input.service_id = input.service.id;
                 input.manager_id = this.manager.id;
 
                 axios.post('vue-collaborateurs', input).then( (response) => {
-                    console.log(input.manager_id);
+
                     this.collaborateurs.push(response.data);
-                    this.newItem = { 'nom': '', 'prenom': '', 'image': '', 'post': '', 'date_naissance': '', 'email':'', 'telephone': '', 'adresse': '', 'service_id': '', 'service_nom':'',  'is_manager': '', 'manager_id':''};
+                    this.newItem = { 'nom': '', 'prenom': '', 'image': '', 'post': '', 'date_naissance': '', 'email':'', 'telephone': '', 'adresse': '', 'service_id': '',  'is_manager': '', 'manager_id':'','service':{'id': '', 'nom': '', 'description':''} };
                     $('#create-item').modal('hide');
                     this.getCollaborateurs();
 
@@ -355,8 +357,10 @@
                     console.log(error);
                 })
             },
-            editCollaborateur(collaborateur) {
+            editCollaborateur(collaborateur, service, manager) {
                 let edit = this.fillItem;
+
+
 
                 edit.nom = collaborateur.nom;
                 edit.id = collaborateur.id;
@@ -367,9 +371,16 @@
                 edit.email = collaborateur.email;
                 edit.telephone = collaborateur.telephone;
                 edit.date_naissance = collaborateur.date_naissance;
-               // edit.service_nom = collaborateur.service.nom;
-               // edit.manager_id = collaborateur.manager.id;
-               // edit.is_manager = collaborateur.manager.is_manager;
+
+                edit.service = service;
+                edit.service_id = service.id;
+                edit.is_manager = collaborateur.is_manager;
+                edit.manager = manager;
+               //edit.service_nom = service.nom;
+               //edit.manager_id = collaborateur.manager.id;
+
+
+                //edit.service_id = collaborateur.service_id;
 
 
                 $("#edit-item").modal('show');
@@ -377,13 +388,13 @@
             updateCollaborateur(id){
                 let input = this.fillItem;
 
-                input.service_id = this.service.id;
-                input.manager_id = this.manager.id;
+                input.service_id = input.service.id;
+                input.manager_id = input.manager.id;
 
                 axios.put('vue-collaborateurs/' + id, input).then( (response)=> {
 
                     this.getCollaborateurs();
-                    this.fillItem = { 'nom': '', 'prenom': '', 'image': '', 'post': '', 'date_naissance': '', 'email':'', 'telephone': '', 'adresse': '' , 'id': '', 'service_id': '', 'service_nom': '', 'manager_id': '', 'is_manager':''};
+                    this.fillItem = { 'nom': '', 'prenom': '', 'image': '', 'post': '', 'date_naissance': '', 'email':'', 'telephone': '', 'adresse': '' , 'id': '', 'service_id': '', 'service_nom': '', 'manager_id': '', 'is_manager':'', 'service':{'id': '', 'nom': '', 'description':''}};
                     $('#edit-item').modal('hide');
 
 
