@@ -26,16 +26,14 @@
                         <td>{{article.created_at}}</td>
                         <td>{{article.updated_at}}</td>
                         <td>
-                            <router-link :to="{name: 'editArticle', params: {id: article.id}}" class="btn btn-xs btn-warning">
-                                Edit
+                            <router-link :to="{name: 'editArticle', params: {id: article.id}}" class="btn btn-xs btn-warning mb-2"><i class="fa fa-pencil" aria-hidden="true"></i>
+                                Modifier
                             </router-link>
-                            <a href="#"
-                               class="btn btn-xs btn-danger"
-                               v-on:click="deleteEntry(article.id, index)">
-                                Delete
+                            <a href="#" class="btn btn-xs btn-danger mb-2" v-on:click="deleteEntry(article.id, index)"><i class="fa fa-trash" aria-hidden="true"></i>
+                                 Supprimer
                             </a>
-                            <router-link :to="{name: 'showArticle', params: {id: article.id}}" class="btn btn-xs btn-info">
-                                Show
+                            <router-link :to="{name: 'showArticle', params: {id: article.id}}" class="btn btn-xs btn-info"><i class="fa fa-eye"></i>
+                                Afficher
                             </router-link>
                         </td>
                     </tr>

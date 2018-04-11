@@ -1,5 +1,5 @@
 @extends('layouts.app')
 
 @section('content')
-<collaborateurs :services="{{$servicesResult}}"></collaborateurs>
+<collaborateurs :services="{{$servicesResult}}" :managers="{{$managers}}"></collaborateurs>
 @endsection

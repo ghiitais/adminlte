@@ -51636,6 +51636,48 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -51644,19 +51686,22 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
         return {
 
-            newItem: (_newItem = { 'nom': '', 'prenom': '', 'image': '', 'post': '', 'date_naissance': '', 'email': '', 'telephone': '', 'adresse': '' }, _defineProperty(_newItem, 'image', ''), _defineProperty(_newItem, 'service_id', ''), _defineProperty(_newItem, 'service_nom', ''), _newItem),
-            fillItem: (_fillItem = { 'nom': '', 'prenom': '', 'image': '', 'post': '', 'date_naissance': '', 'email': '', 'telephone': '', 'adresse': '' }, _defineProperty(_fillItem, 'image', ''), _defineProperty(_fillItem, 'id', ''), _defineProperty(_fillItem, 'service', {}), _defineProperty(_fillItem, 'service_id', ''), _defineProperty(_fillItem, 'service_nom', ''), _fillItem),
+            newItem: (_newItem = { 'nom': '', 'prenom': '', 'image': '', 'post': '', 'date_naissance': '', 'email': '', 'telephone': '', 'adresse': '' }, _defineProperty(_newItem, 'image', ''), _defineProperty(_newItem, 'service_id', ''), _defineProperty(_newItem, 'is_manager', ''), _defineProperty(_newItem, 'manager_id', ''), _newItem),
+            fillItem: (_fillItem = { 'nom': '', 'prenom': '', 'image': '', 'post': '', 'date_naissance': '', 'email': '', 'telephone': '', 'adresse': '' }, _defineProperty(_fillItem, 'image', ''), _defineProperty(_fillItem, 'id', ''), _defineProperty(_fillItem, 'service_id', ''), _defineProperty(_fillItem, 'is_manager', ''), _defineProperty(_fillItem, 'manager_id', ''), _fillItem),
             collaborateurs: [],
-            service: {}
+            service: {},
+            manager: {},
+            managers: []
 
         };
     },
 
 
-    props: ['services'],
+    props: ['services', 'managers'],
 
     mounted: function mounted() {
         this.getCollaborateurs();
+        this.managers = managers;
     },
 
 
@@ -51672,13 +51717,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             var _this2 = this;
 
             var input = this.newItem;
-
             input.service_id = this.service.id;
 
-            axios.post('vue-collaborateurs', input).then(function (response) {
+            input.manager_id = this.manager.id;
 
+            axios.post('vue-collaborateurs', input).then(function (response) {
+                console.log(input.manager_id);
                 _this2.collaborateurs.push(response.data);
-                _this2.newItem = { 'nom': '', 'prenom': '', 'image': '', 'post': '', 'date_naissance': '', 'email': '', 'telephone': '', 'adresse': '', 'service_id': '' };
+                _this2.newItem = { 'nom': '', 'prenom': '', 'image': '', 'post': '', 'date_naissance': '', 'email': '', 'telephone': '', 'adresse': '', 'service_id': '', 'service_nom': '', 'is_manager': '', 'manager_id': '' };
                 $('#create-item').modal('hide');
                 _this2.getCollaborateurs();
             }).catch(function (error) {
@@ -51697,9 +51743,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             edit.email = collaborateur.email;
             edit.telephone = collaborateur.telephone;
             edit.date_naissance = collaborateur.date_naissance;
-            edit.service_nom = collaborateur.service.nom;
+            // edit.service_nom = collaborateur.service.nom;
+            // edit.manager_id = collaborateur.manager.id;
+            // edit.is_manager = collaborateur.manager.is_manager;
 
-            console.log(edit.service_nom);
 
             $("#edit-item").modal('show');
         },
@@ -51709,17 +51756,18 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             var input = this.fillItem;
 
             input.service_id = this.service.id;
-            input.service_nom = this.service.nom;
+            input.manager_id = this.manager.id;
+
             axios.put('vue-collaborateurs/' + id, input).then(function (response) {
 
                 _this3.getCollaborateurs();
-                _this3.fillItem = { 'nom': '', 'prenom': '', 'image': '', 'post': '', 'date_naissance': '', 'email': '', 'telephone': '', 'adresse': '', 'id': '', 'service_id': '' };
+                _this3.fillItem = { 'nom': '', 'prenom': '', 'image': '', 'post': '', 'date_naissance': '', 'email': '', 'telephone': '', 'adresse': '', 'id': '', 'service_id': '', 'service_nom': '', 'manager_id': '', 'is_manager': '' };
                 $('#edit-item').modal('hide');
-                console.log(_this3.service.nom);
             }).catch(function (error) {
                 console.log(error.response.data);
             });
         },
+        loadManagers: function loadManagers() {},
         imageChangedOnCreate: function imageChangedOnCreate(e) {
             var _this4 = this;
 
@@ -51740,9 +51788,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             fileReader.onload = function (e) {
                 _this5.fillItem.image = e.target.result;
             };
-        },
-        ajouterBtn: function ajouterBtn() {
-            this.newItem = { 'nom': '', 'prenom': '', 'image': '', 'post': '', 'date_naissance': '', 'email': '', 'telephone': '', 'adresse': '', 'service_id': '' };
         },
         deleteCollaborateur: function deleteCollaborateur(collaborateur) {
             var _this6 = this;
@@ -51803,6 +51848,16 @@ var render = function() {
             _c("td", [_vm._v(_vm._s(collaborateur.post))]),
             _vm._v(" "),
             _c("td", [_vm._v(_vm._s(collaborateur.service.nom))]),
+            _vm._v(" "),
+            _c("td", [
+              _vm._v(
+                _vm._s(
+                  collaborateur.manager == null
+                    ? ""
+                    : collaborateur.manager.fullName
+                )
+              )
+            ]),
             _vm._v(" "),
             _c("td", [
               _c(
@@ -52338,6 +52393,7 @@ var render = function() {
                             "is-danger": _vm.errors.has("date")
                           },
                           attrs: {
+                            name: "date",
                             type: "date",
                             placeholder: "Choisissez une date"
                           },
@@ -52433,6 +52489,110 @@ var render = function() {
                           )
                         })
                       )
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col-lg-12" }, [
+                      _c("div", { staticClass: "form-group" }, [
+                        _c("span", [_vm._v(" Etes-vous un manager?")]),
+                        _vm._v(" "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.newItem.is_manager,
+                              expression: "newItem.is_manager"
+                            }
+                          ],
+                          attrs: { type: "radio", name: "radio", value: "1" },
+                          domProps: {
+                            checked: _vm._q(_vm.newItem.is_manager, "1")
+                          },
+                          on: {
+                            change: function($event) {
+                              _vm.$set(_vm.newItem, "is_manager", "1")
+                            }
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c("label", [_vm._v(" Oui ")]),
+                        _vm._v(" "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.newItem.is_manager,
+                              expression: "newItem.is_manager"
+                            }
+                          ],
+                          attrs: { type: "radio", name: "radio", value: "0" },
+                          domProps: {
+                            checked: _vm._q(_vm.newItem.is_manager, "0")
+                          },
+                          on: {
+                            change: function($event) {
+                              _vm.$set(_vm.newItem, "is_manager", "0")
+                            }
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c("label", [_vm._v(" Non ")]),
+                        _vm._v(" "),
+                        _c("br")
+                      ]),
+                      _vm._v(" "),
+                      _vm.newItem.is_manager == "0"
+                        ? _c("div", { staticClass: "col-lg-12" }, [
+                            _c("label", [_vm._v("Choisissez votre manager: ")]),
+                            _vm._v(" "),
+                            _c(
+                              "select",
+                              {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model",
+                                    value: _vm.manager,
+                                    expression: "manager"
+                                  }
+                                ],
+                                staticClass: "form-control",
+                                on: {
+                                  change: function($event) {
+                                    var $$selectedVal = Array.prototype.filter
+                                      .call($event.target.options, function(o) {
+                                        return o.selected
+                                      })
+                                      .map(function(o) {
+                                        var val =
+                                          "_value" in o ? o._value : o.value
+                                        return val
+                                      })
+                                    _vm.manager = $event.target.multiple
+                                      ? $$selectedVal
+                                      : $$selectedVal[0]
+                                  }
+                                }
+                              },
+                              _vm._l(_vm.managers, function(manager) {
+                                return _c(
+                                  "option",
+                                  { domProps: { value: manager } },
+                                  [
+                                    _vm._v(
+                                      "\n                                            " +
+                                        _vm._s(manager.nom) +
+                                        " " +
+                                        _vm._s(manager.prenom) +
+                                        " "
+                                    )
+                                  ]
+                                )
+                              })
+                            )
+                          ])
+                        : _vm._e()
                     ])
                   ]),
                   _vm._v(" "),
@@ -53034,6 +53194,110 @@ var render = function() {
                           )
                         })
                       )
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col-lg-12" }, [
+                      _c("div", { staticClass: "form-group" }, [
+                        _c("span", [_vm._v(" Etes-vous un manager?")]),
+                        _vm._v(" "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.fillItem.is_manager,
+                              expression: "fillItem.is_manager"
+                            }
+                          ],
+                          attrs: { type: "radio", name: "radio", value: "1" },
+                          domProps: {
+                            checked: _vm._q(_vm.fillItem.is_manager, "1")
+                          },
+                          on: {
+                            change: function($event) {
+                              _vm.$set(_vm.fillItem, "is_manager", "1")
+                            }
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c("label", [_vm._v(" Oui ")]),
+                        _vm._v(" "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.fillItem.is_manager,
+                              expression: "fillItem.is_manager"
+                            }
+                          ],
+                          attrs: { type: "radio", name: "radio", value: "0" },
+                          domProps: {
+                            checked: _vm._q(_vm.fillItem.is_manager, "0")
+                          },
+                          on: {
+                            change: function($event) {
+                              _vm.$set(_vm.fillItem, "is_manager", "0")
+                            }
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c("label", [_vm._v(" Non ")]),
+                        _vm._v(" "),
+                        _c("br")
+                      ]),
+                      _vm._v(" "),
+                      _vm.fillItem.is_manager == "0"
+                        ? _c("div", { staticClass: "col-lg-12" }, [
+                            _c("label", [_vm._v("Choisissez votre manager: ")]),
+                            _vm._v(" "),
+                            _c(
+                              "select",
+                              {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model",
+                                    value: _vm.manager,
+                                    expression: "manager"
+                                  }
+                                ],
+                                staticClass: "form-control",
+                                on: {
+                                  change: function($event) {
+                                    var $$selectedVal = Array.prototype.filter
+                                      .call($event.target.options, function(o) {
+                                        return o.selected
+                                      })
+                                      .map(function(o) {
+                                        var val =
+                                          "_value" in o ? o._value : o.value
+                                        return val
+                                      })
+                                    _vm.manager = $event.target.multiple
+                                      ? $$selectedVal
+                                      : $$selectedVal[0]
+                                  }
+                                }
+                              },
+                              _vm._l(_vm.managers, function(manager) {
+                                return _c(
+                                  "option",
+                                  { domProps: { value: manager } },
+                                  [
+                                    _vm._v(
+                                      "\n                                            " +
+                                        _vm._s(manager.nom) +
+                                        " " +
+                                        _vm._s(manager.prenom) +
+                                        " "
+                                    )
+                                  ]
+                                )
+                              })
+                            )
+                          ])
+                        : _vm._e()
                     ])
                   ]),
                   _vm._v(" "),
@@ -53097,7 +53361,9 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", { attrs: { scope: "col" } }, [_vm._v("Post")]),
         _vm._v(" "),
-        _c("th", { attrs: { scope: "col" } }, [_vm._v("Services")]),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Service")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Manager")]),
         _vm._v(" "),
         _c("th", { attrs: { scope: "col" } }, [_vm._v("Actions")])
       ])
@@ -54125,8 +54391,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
@@ -54243,14 +54507,18 @@ var render = function() {
                   _c(
                     "router-link",
                     {
-                      staticClass: "btn btn-xs btn-warning",
+                      staticClass: "btn btn-xs btn-warning mb-2",
                       attrs: {
                         to: { name: "editArticle", params: { id: article.id } }
                       }
                     },
                     [
+                      _c("i", {
+                        staticClass: "fa fa-pencil",
+                        attrs: { "aria-hidden": "true" }
+                      }),
                       _vm._v(
-                        "\n                            Edit\n                        "
+                        "\n                            Modifier\n                        "
                       )
                     ]
                   ),
@@ -54258,7 +54526,7 @@ var render = function() {
                   _c(
                     "a",
                     {
-                      staticClass: "btn btn-xs btn-danger",
+                      staticClass: "btn btn-xs btn-danger mb-2",
                       attrs: { href: "#" },
                       on: {
                         click: function($event) {
@@ -54267,8 +54535,12 @@ var render = function() {
                       }
                     },
                     [
+                      _c("i", {
+                        staticClass: "fa fa-trash",
+                        attrs: { "aria-hidden": "true" }
+                      }),
                       _vm._v(
-                        "\n                            Delete\n                        "
+                        "\n                             Supprimer\n                        "
                       )
                     ]
                   ),
@@ -54282,8 +54554,9 @@ var render = function() {
                       }
                     },
                     [
+                      _c("i", { staticClass: "fa fa-eye" }),
                       _vm._v(
-                        "\n                            Show\n                        "
+                        "\n                            Afficher\n                        "
                       )
                     ]
                   )

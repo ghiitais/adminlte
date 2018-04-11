@@ -1,7 +1,7 @@
 <template>
     <div class="container">
             <div class="col-lg-12 justify-content-end pb-2 mt-10">
-                <button type="button"  class="btn btn-success" data-toggle="modal" data-target="#create-item" >
+                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#create-item" >
                     Ajouter collaborateur <i class="fa fa-plus" aria-hidden="true"></i>
                 </button>
             </div>
@@ -16,7 +16,8 @@
                 <th scope="col">Téléphone</th>
                 <th scope="col">Adresse</th>
                 <th scope="col">Post</th>
-                <th scope="col">Services</th>
+                <th scope="col">Service</th>
+                <th scope="col">Manager</th>
                 <th scope="col">Actions</th>
             </tr>
             </thead>
@@ -30,6 +31,9 @@
                 <td>{{collaborateur.adresse}}</td>
                 <td>{{collaborateur.post}}</td>
                 <td>{{ collaborateur.service.nom }}</td>
+                <td>{{ collaborateur.manager == null ? '': collaborateur.manager.fullName }}</td>
+
+
                 <td>
                 <button type="button" class="btn btn-warning mb-2" @click.prevent="editCollaborateur( collaborateur )" ><i class="fa fa-pencil" aria-hidden="true"></i> Modifier </button>
                 <button type="button" class="btn btn-danger" @click.prevent="deleteCollaborateur( collaborateur )"><i class="fa fa-trash" aria-hidden="true"></i> Supprimer </button>
@@ -139,7 +143,7 @@
                                 <div class="col-lg-12">
                                     <div class="form-group">
                                         <label>Date de naissance: <span class="required">*</span> </label>
-                                        <input type="date"  :class="{'input': true, 'is-danger': errors.has('date') }" v-validate="'required|date_format:YYYY-MM-DD'" placeholder="Choisissez une date"  class="form-control" v-model="newItem.date_naissance">
+                                        <input name= "date" type="date"  :class="{'input': true, 'is-danger': errors.has('date') }" v-validate="'required|date_format:YYYY-MM-DD'" placeholder="Choisissez une date"  class="form-control" v-model="newItem.date_naissance">
                                         <i v-show="errors.has('date')" class="fa fa-warning"></i>
                                         <span v-show="errors.has('date')" class="" style="color: red">{{ errors.first('date') }}</span>
                                     </div>
@@ -151,6 +155,25 @@
                                         <option v-for="service in services" :value="service">
                                             {{service.nom}} </option>
                                     </select>
+                                </div>
+
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <span> Etes-vous un manager?</span>
+                                        <input type="radio" name="radio" v-model="newItem.is_manager" value="1">
+                                        <label> Oui </label>
+                                        <input type="radio" name="radio" v-model="newItem.is_manager" value="0">
+                                        <label> Non </label>
+                                        <br>
+                                    </div>
+                                    <div class="col-lg-12" v-if="newItem.is_manager == '0'">
+                                        <label>Choisissez votre manager: </label>
+                                        <select class="form-control" v-model="manager">
+                                            <option v-for="manager in managers" :value="manager">
+                                                {{manager.nom}} {{manager.prenom}} </option>
+                                        </select>
+                                    </div>
+
                                 </div>
                             </div>
                             <div class="modal-footer">
@@ -249,6 +272,25 @@
                                             {{service.nom}} </option>
                                     </select>
                                 </div>
+
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <span> Etes-vous un manager?</span>
+                                        <input type="radio" name="radio" v-model="fillItem.is_manager" value="1">
+                                        <label> Oui </label>
+                                        <input type="radio" name="radio" v-model="fillItem.is_manager" value="0">
+                                        <label> Non </label>
+                                        <br>
+                                    </div>
+                                    <div class="col-lg-12" v-if="fillItem.is_manager == '0'">
+                                        <label>Choisissez votre manager: </label>
+                                        <select class="form-control" v-model="manager">
+                                            <option v-for="manager in managers" :value="manager">
+                                                {{manager.nom}} {{manager.prenom}} </option>
+                                        </select>
+                                    </div>
+
+                                </div>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -271,22 +313,21 @@
 
             return {
 
-                newItem: { 'nom': '', 'prenom': '', 'image': '', 'post': '', 'date_naissance': '', 'email':'', 'telephone': '', 'adresse': '', 'image': '', 'service_id':'', 'service_nom':''},
-                fillItem: { 'nom': '', 'prenom': '', 'image': '', 'post': '', 'date_naissance': '', 'email':'', 'telephone': '', 'adresse': '' , 'image': '','id': '', 'service': {}, 'service_id': '', 'service_nom':''},
+                newItem: { 'nom': '', 'prenom': '', 'image': '', 'post': '', 'date_naissance': '', 'email':'', 'telephone': '', 'adresse': '', 'image': '', 'service_id':'', 'is_manager':'', 'manager_id':''},
+                fillItem: { 'nom': '', 'prenom': '', 'image': '', 'post': '', 'date_naissance': '', 'email':'', 'telephone': '', 'adresse': '' , 'image': '','id': '', 'service_id': '', 'is_manager':'', 'manager_id':''},
                 collaborateurs: [],
                 service: {},
-
+                manager:{},
+                managers: []
 
             }
         },
 
-        props: [
-            'services'
-        ],
+        props: ['services', 'managers'],
 
         mounted() {
             this.getCollaborateurs();
-
+            this.managers = managers;
         },
 
         methods: {
@@ -299,13 +340,14 @@
 
             createCollaborateur() {
                 let input = this.newItem;
-
                 input.service_id = this.service.id;
 
-                axios.post('vue-collaborateurs', input).then( (response) => {
+                input.manager_id = this.manager.id;
 
+                axios.post('vue-collaborateurs', input).then( (response) => {
+                    console.log(input.manager_id);
                     this.collaborateurs.push(response.data);
-                    this.newItem = { 'nom': '', 'prenom': '', 'image': '', 'post': '', 'date_naissance': '', 'email':'', 'telephone': '', 'adresse': '', 'service_id': ''};
+                    this.newItem = { 'nom': '', 'prenom': '', 'image': '', 'post': '', 'date_naissance': '', 'email':'', 'telephone': '', 'adresse': '', 'service_id': '', 'service_nom':'',  'is_manager': '', 'manager_id':''};
                     $('#create-item').modal('hide');
                     this.getCollaborateurs();
 
@@ -325,9 +367,10 @@
                 edit.email = collaborateur.email;
                 edit.telephone = collaborateur.telephone;
                 edit.date_naissance = collaborateur.date_naissance;
-                edit.service_nom = collaborateur.service.nom;
+               // edit.service_nom = collaborateur.service.nom;
+               // edit.manager_id = collaborateur.manager.id;
+               // edit.is_manager = collaborateur.manager.is_manager;
 
-                console.log(edit.service_nom);
 
                 $("#edit-item").modal('show');
             },
@@ -335,17 +378,21 @@
                 let input = this.fillItem;
 
                 input.service_id = this.service.id;
-                input.service_nom = this.service.nom;
+                input.manager_id = this.manager.id;
+
                 axios.put('vue-collaborateurs/' + id, input).then( (response)=> {
 
                     this.getCollaborateurs();
-                    this.fillItem = { 'nom': '', 'prenom': '', 'image': '', 'post': '', 'date_naissance': '', 'email':'', 'telephone': '', 'adresse': '' , 'id': '', 'service_id': ''};
+                    this.fillItem = { 'nom': '', 'prenom': '', 'image': '', 'post': '', 'date_naissance': '', 'email':'', 'telephone': '', 'adresse': '' , 'id': '', 'service_id': '', 'service_nom': '', 'manager_id': '', 'is_manager':''};
                     $('#edit-item').modal('hide');
-                    console.log(this.service.nom);
+
 
                 }).catch( (error)=> {
                     console.log( error.response.data )
                 })
+            },
+            loadManagers(){
+
             },
             imageChangedOnCreate(e){
                 console.log(e.target.files[0])
@@ -356,6 +403,7 @@
                     //this.fillItem.image = e.target.result
                 }
             },
+
             imageChangedOnUpdate(e){
                 console.log(e.target.files[0])
                 var fileReader=new FileReader()
@@ -364,9 +412,7 @@
                     this.fillItem.image = e.target.result
                 }
             },
-            ajouterBtn(){
-                this.newItem = { 'nom': '', 'prenom': '', 'image': '', 'post': '', 'date_naissance': '', 'email':'', 'telephone': '', 'adresse': '', 'service_id': '' };
-            },
+
             deleteCollaborateur( collaborateur ) {
                 let conf = confirm("Do you ready want to delete this collab?");
                 if (conf === true) {

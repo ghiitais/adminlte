@@ -6,9 +6,30 @@ use Illuminate\Database\Eloquent\Model;
 
 class Collaborateur extends Model
 {
-    protected $fillable = ['nom', 'prenom','image', 'date_naissance', 'post', 'email', 'telephone', 'adresse', 'service_id'];
+    protected $fillable = ['nom', 'prenom', 'image', 'date_naissance', 'post', 'email', 'telephone', 'adresse', 'service_id', 'is_manager', 'manager_id'];
 
-    public function service() {
+    protected $appends = ['fullName'];
+
+    public function service()
+    {
         return $this->belongsTo(Service::class);
     }
+
+    public function manager()
+    {
+        return $this->belongsTo(Collaborateur::class);
+    }
+
+    public function getFullNameAttribute()
+    {
+        return $this->attributes['nom'].' '.$this->attributes['prenom'];
+    }
+
+
+/*
+    public function setIsManagerAttribute()
+    {
+     $this->attributes['is_manager'] = true;
+    }
+*/
 }

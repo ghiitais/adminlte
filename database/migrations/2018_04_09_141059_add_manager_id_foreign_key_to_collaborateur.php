@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddForeignKeyToCollaborateursTable extends Migration
+class AddManagerIdForeignKeyToCollaborateur extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,10 @@ class AddForeignKeyToCollaborateursTable extends Migration
      */
     public function up()
     {
-        Schema::table('collaborateurs', function(Blueprint $table) {
-            $table->foreign('service_id')->references('id')->on('services');
-        });
+        Schema::table('collaborateurs', function (Blueprint $table) {
+            $table->foreign('manager_id')->references('id')->on('collaborateurs');
 
+        });
     }
 
     /**
@@ -27,8 +27,7 @@ class AddForeignKeyToCollaborateursTable extends Migration
     public function down()
     {
         Schema::table('collaborateurs', function (Blueprint $table) {
-            $table->dropForeign(['service_id']);
-
+            $table->dropColumn(['manager_id']);
         });
     }
 }

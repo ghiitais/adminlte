@@ -27,3 +27,7 @@ Route::get('collaborateurs', 'CollaborateurController@home');
 
 Route::resource('vue-services', 'ServiceController');
 Route::get('services', 'ServiceController@home');
+/*Route::get('/test', function () {
+    return \App\Collaborateur::with(['service', 'manager'])->orderBy('created_at', 'DESC')->get();
+
+}); */
