@@ -52,12 +52,7 @@ class CollaborateurController extends Controller
      */
     public function store(Request $request)
     {
-/*
-
-
-        $collaborateur  = new Collaborateur();
-
-
+    /*    $collaborateur  = new Collaborateur();
         $collaborateur->nom = $request ->nom;
         $collaborateur->prenom = $request->prenom;
         $collaborateur->date_naissance = $request->date_naissance;
@@ -70,9 +65,10 @@ class CollaborateurController extends Controller
         $collaborateur->manager_id = $request->manager_id;
 
         $collaborateur->save();
-    return response()->json(['status' => 'success','msg'=>'Collaborateur created successfully', 'collaborateur'=>$collaborateur]);
-*/
-        \Log::info($request->all());
+    return $collaborateur;
+
+    */
+       \Log::info($request->all());
         $exploded=explode(',',$request->image);
         $decoded=base64_decode($exploded[1]);
         if(str_contains($exploded[0],'jpeg')){
@@ -87,6 +83,8 @@ class CollaborateurController extends Controller
         $collaborateur = Collaborateur::create($request->except('image')+[
                 'image'=>$filename
             ]);
+
+        return $collaborateur;
 
     }
 
@@ -121,28 +119,31 @@ class CollaborateurController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $collaborateur = Collaborateur::findOrFail($id);
         if($request->image) {
             \Log::info($request->all());
             $exploded=explode(',',$request->image);
-            $decoded=base64_decode($exploded[1]);
-            if(str_contains($exploded[0],'jpeg')){
-                $exte='png';
-            }else{
-                $exte='jpg';
-            }
-            $filename=str_random().'.'.$exte;
-            $path=public_path().'/'.$filename;
-            file_put_contents($path,$decoded);
+            if (count($exploded) != 2) {
 
-            $collaborateur = Collaborateur::findOrFail($id);
+            } else {
+                $decoded=base64_decode($exploded[1]);
+                if(str_contains($exploded[0],'jpeg')){
+                    $exte='png';
+                }else{
+                    $exte='jpg';
+                }
+                $filename=str_random().'.'.$exte;
+                $path=public_path().'/'.$filename;
+                file_put_contents($path,$decoded);
+                $collaborateur->update([
+                    'image'=>$filename
+                ]);
+            }
+
 
             if($collaborateur->count()){
-                $collaborateur->update($request->except('image')+[
-                        'image'=>$filename
-                    ]);
-                return response()->json(['status'=>'success','msg'=>'Post updated successfully']);
-            } else {
-                return response()->json(['status'=>'error','msg'=>'error in updating post']);
+                $collaborateur->update($request->except('image'));
+                return $collaborateur;
             }
 
 

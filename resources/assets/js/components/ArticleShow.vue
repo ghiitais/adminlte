@@ -1,18 +1,19 @@
 <template>
     <div>
+        <router-link to="/" class="mb-5"> <i class="fa fa-arrow-left"></i> <strong>  Retour à actualités </strong></router-link>
+
         <h3> <strong>{{ article.titre }} </strong> </h3>
         <br>
         <div>
-            <img :src="'http://localhost:8000/'+article.image" style="display:block;" width="80%" height="80%" class="img"/>
+            <img :src="'http://localhost:8000/'+article.image" style="display:block;" width="70%" height="70%" class="img"/>
 
         </div>
-        <div>
+        <div class="mt-5">
             <froalaView v-model="article.contenu"></froalaView>
         </div>
-
         <br/>
-        <span class="glyphicon glyphicon-arrow-left"></span>
-        <router-link to="/"> Back to actualités </router-link>
+        <span></span>
+
     </div>
 </template>
 

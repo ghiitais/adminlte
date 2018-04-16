@@ -98,25 +98,34 @@ class ArticlesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        \Log::info($request->all());
-        $exploded=explode(',',$request->image);
-        $decoded=base64_decode($exploded[1]);
-        if(str_contains($exploded[0],'jpeg')){
-            $exte='png';
-        }else{
-            $exte='jpg';
-        }
-        $filename=str_random().'.'.$exte;
-        $path=public_path().'/'.$filename;
-        file_put_contents($path,$decoded);
-        $article = Article::find($id);
-        if($article->count()){
-            $article->update($request->except('image')+[
+        $article  = Article::findOrFail($id);
+        if($request->image) {
+            \Log::info($request->all());
+            $exploded=explode(',',$request->image);
+            if (count($exploded) != 2) {
+
+            } else {
+                $decoded=base64_decode($exploded[1]);
+                if(str_contains($exploded[0],'jpeg')){
+                    $exte='png';
+                }else{
+                    $exte='jpg';
+                }
+                $filename=str_random().'.'.$exte;
+                $path=public_path().'/'.$filename;
+                file_put_contents($path,$decoded);
+                $article->update([
                     'image'=>$filename
                 ]);
-            return response()->json(['statur'=>'success','msg'=>'Post updated successfully']);
-        } else {
-            return response()->json(['statur'=>'error','msg'=>'error in updating post']);
+            }
+
+
+            if($article->count()){
+                $article->update($request->except('image'));
+                return $article;
+            }
+
+
         }
     }
 

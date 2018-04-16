@@ -6,13 +6,13 @@
 
         <form v-on:submit="updateForm()">
             <div class="row">
-                <div class="col-xs-12 form-group">
+                <div class="col-lg-12 form-group">
                     <label class="control-label">Titre</label>
                     <input type="text" v-model="article.titre" class="form-control">
                 </div>
             </div>
             <div class="row">
-                <div class="col-xs-12 form-group">
+                <div class="col-lg-12 form-group">
                     <label class="control-label">Contenu</label>
                     <froala :tag="'textarea'"  v-model="article.contenu"></froala>
                 </div>
@@ -22,7 +22,7 @@
                 <input type="file" @change="imageChanged" :src="'http://localhost:8000/'+article.image"  class="form-control">
             </div>
             <div class="row">
-                <div class="col-xs-12 form-group">
+                <div class="col-lg-12 form-group">
                     <button class="btn btn-success">Update</button>
                 </div>
             </div>

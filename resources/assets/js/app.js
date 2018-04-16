@@ -22,11 +22,14 @@ require('froala-editor/css/froala_style.min.css')
 
 // Import and use Vue Froala lib.
 import VueFroala from 'vue-froala-wysiwyg'
+import VuePaginator from 'vuejs-paginator'
+import VueResource from 'vue-resource';
 
 
 Vue.use(VueFroala)
 Vue.use(VeeValidate);
-
+Vue.use(VuePaginator);
+Vue.use(VueResource);
 
 Vue.component('collaborateurs', require('./components/Collaborateurs'));
 Vue.component('services', require('./components/Services'));
