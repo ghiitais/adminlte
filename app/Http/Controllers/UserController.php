@@ -56,20 +56,18 @@ class UserController extends Controller
         return view('Settings.managers', compact('users'));
     }
 
-    public function addManagersFunc(Request $request)
+    public function addManagersFunc($id)
     {
-        $usersChecked = $request->input('user');
-        //dd($usersChecked);
-        foreach ($usersChecked as $user => $value){
-            $user = User::where('id', $value)->first();
+        $user = User::findOrFail($id);
+
             $user->is_manager = 1;
             $user->save();
-        }
-        return redirect()->back()->with("status", "Managers ajoutés avec succès" );
+
+        return redirect()->back()->with("status", "Manager ajouté avec succès" );
     }
 
     public function removeManager($id) {
-        $user = User::where('id', $id)->first();
+        $user = User::findOrFail($id);
         $user->is_manager = 0;
         $user->save();
 

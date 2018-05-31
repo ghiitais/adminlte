@@ -18,6 +18,14 @@
                         <option value="conge"> Demande de congé </option>
                     </select>
                 </div>
+                <div class="form-group">
+                    <label for="priority">Priorité de la demande: </label>
+                    <select required id="priority" class="form-control" name="priority">
+                        <option selected disabled>Selectionner une priorité</option>
+                        <option value="high">Urgente</option>
+                        <option value="low">Normale</option>
+                    </select>
+                </div>
                 <div id="conge" style="display:none">
                     <div class="row">
                         <div class="form-group col-md-6">
@@ -60,14 +68,7 @@
                                 <option value="Exceptionnel">Exceptionnel</option>
                             </select>
                         </div>
-                        <div class="form-group col-md-6">
-                            <label for="priority">Priorité de la demande: </label>
-                            <select required id="priority" class="form-control" name="priority">
-                                <option selected disabled>Selectionner une priorité</option>
-                                <option value="high">Urgente</option>
-                                <option value="low">Normale</option>
-                            </select>
-                        </div>
+
                     </div>
                     <div class="form-group">
                         

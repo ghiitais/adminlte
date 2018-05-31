@@ -43,10 +43,11 @@
 
     <!-- Logo -->
     <a href="{{ url('/home') }}" class="logo">
+
       <!-- mini logo for sidebar mini 50x50 pixels -->
-      <span class="logo-mini"><b>I</b>NET</span>
+      <span class="logo-mini"><b>I</b>neoxia</span>
       <!-- logo for regular state and mobile devices -->
-      <span class="logo-lg"><b>Intra</b>NET</span>
+      <span class="logo-lg"> <img src="neoxia.png" height="40" width="40"> <b>Intra</b>neoxia </span>
     </a>
 
     <!-- Header Navbar: style can be found in header.less -->
@@ -79,15 +80,16 @@
               <!-- Menu Footer-->
               <li class="user-footer">
                 <div class="pull-left">
-                  <a href="{{ url('/profile') }}" class="btn btn-default btn-flat">Profile</a>
+                  <a href="{{ url('/profile') }}" class="btn btn-default btn-flat">Profile <i class="fa fa-user" aria-hidden="true"></i></a>
                 </div>
                 <div class="pull-right">
                 <a class="btn btn-default btn-flat" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                     document.getElementById('logout-form').submit();">
-                                        Se déconnecter </a>
+                                        Se déconnecter <i class="fa fa-sign-out" aria-hidden="true"></i> </a>
 
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+
+                  <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                         @csrf
                                     </form>
                 </div>
@@ -128,70 +130,70 @@
       <!-- /.search form -->
       <!-- sidebar menu: : style can be found in sidebar.less -->
       <ul class="sidebar-menu" data-widget="tree">
-        <li class="header">MAIN NAVIGATION</li>
+
         @auth
         <li>
           <a href="{{url('/actualites')}}">
-            <i class="fa fa-th"></i> <span>Actualités</span>
+            <i class="fa fa-newspaper-o"></i> <span>Actualités</span>
           </a>
         </li>
         
         <li class="treeview">
           <a href="#">
-            <i class="fa fa-dashboard"></i> <span>Annuaire</span>
+            <i class="fa fa-user"></i> <span>Annuaire</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="{{url('/services')}}"><i class="fa fa-circle-o"></i> Services</a></li>
-            <li><a href="{{url('/collaborateurs')}}"><i class="fa fa-circle-o"></i> Collaborateurs</a></li>
+            <li><a href="{{url('/services')}}"><i class="fa fa-building"></i> Services</a></li>
+            <li><a href="{{url('/collaborateurs')}}"><i class="fa fa-users"></i> Collaborateurs</a></li>
           </ul>
         </li>
         
         @if(\Auth::user()->is_admin == 1 )
         <li>
           <a href="{{url('admin/demandes')}}">
-            <i class="fa fa-th"></i> <span>Demandes</span>
+            <i class="fa fa-files-o"></i> <span>Demandes</span>
           </a>
         </li>
         @elseif(\Auth::user()->is_manager == 1)
         <li class="treeview">
           <a href="#">
-            <i class="fa fa-dashboard"></i> <span>Demandes</span>
+            <i class="fa fa-files-o"></i> <span>Demandes</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="{{url('/mes_demandes')}}"><i class="fa fa-circle-o"></i>Mes demandes</a></li>
-            <li><a href="{{url('manager/demandes')}}"><i class="fa fa-circle-o"></i>Demandes des collaborateurs</a></li>
+            <li><a href="{{url('/mes_demandes')}}"><i class="fa fa-edit"></i>Mes demandes</a></li>
+            <li><a href="{{url('manager/demandes')}}"><i class="fa fa-files-o"></i>Demandes des collaborateurs</a></li>
           </ul>
         </li>
         @elseif(\Auth::user()->is_assistante == 1)
             <li>
             <a href="{{url('assistante/demandes_active')}}">
-                <i class="fa fa-th"></i> <span>Demandes</span>
+                <i class="fa fa-files-o"></i> <span>Demandes</span>
             </a>
             </li>
         @else
             <li>
                 <a href="{{url('mes_demandes')}}">
-                    <i class="fa fa-th"></i> <span>Demandes</span>
+                    <i class="fa fa-edit"></i> <span>Demandes</span>
                 </a>
             </li>
         @endif
 
         <li>
             <a href="#">
-                <i class="fa fa-th"></i> <span>Evènements</span>
+                <i class="fa fa-calendar"></i> <span>Evènements</span>
             </a>
         </li>
 
         @if(\Illuminate\Support\Facades\Auth::user()-> is_admin == 1)
         <li class="active treeview menu-open">
           <a href="#">
-            <i class="fa fa-dashboard"></i> <span>Configurations</span>
+            <i class="fa fa-cogs"></i> <span>Configurations</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
@@ -206,10 +208,36 @@
 
         <li>
             <a href="{{url('ticketsShow')}}">
-                <i class="fa fa-th"></i> <span>Tickets</span>
+                <i class="fa fa-tags"></i> <span>Tickets</span>
             </a>
         </li>
 
+
+          <li class="treeview">
+            <a href="#">
+              <i class="fa fa-files-o"></i> <span>Documents</span>
+              <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+            </a>
+            <ul class="treeview-menu">
+              <li><a href="{{url('file')}}"><i class="fa fa-share"></i> Partager </a></li>
+              <li><a href="{{url('all_files')}}"><i class="fa fa-files-o"></i> Consulter</a></li>
+            </ul>
+          </li>
+
+          <li class="treeview">
+            <a href="#">
+              <i class="fa fa-shopping-cart"></i> <span>Marketplace</span>
+              <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+            </a>
+            <ul class="treeview-menu">
+              <li><a href="{{url('multiuploads')}}"><i class="fa fa-share"></i> Partager </a></li>
+              <li><a href="#"><i class="fa  fa-eye"></i> Consulter</a></li>
+            </ul>
+          </li>
         
         @endauth
       </ul>
@@ -227,7 +255,7 @@
     <div class="pull-right hidden-xs">
       <b>Version</b> 2.4.0
     </div>
-    <strong>Copyright &copy; 2014-2016.</strong> All rights
+    <strong>Copyright &copy; 2018.</strong> All rights
     reserved.
   </footer>
 

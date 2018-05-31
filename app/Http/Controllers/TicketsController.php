@@ -106,7 +106,7 @@ public function addTicket(Request $request){
     }
 
     public function showAll(){
-        $tickets = Ticket::paginate(10);
+        $tickets = Ticket::paginate(7);
         $categories = Category::all();
 
         return view('tickets.index', compact('tickets', 'categories'));

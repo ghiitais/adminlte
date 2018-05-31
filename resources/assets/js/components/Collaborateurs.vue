@@ -1,35 +1,35 @@
 <template>
 
-<section class="content">
-      <div class="row">
-        <div class="col-md-12">
-            <div class="box">
-                <div class="box-body">
-                    <div class="form-group">
-                        <button type="button" class="btn btn-success mb-3" data-toggle="modal" data-target="#create-item" >
+    <section class="content">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box">
+                    <div class="box-body">
+                        <div class="form-group">
+                            <button type="button" class="btn btn-success mb-3" data-toggle="modal" data-target="#create-item" >
                                 Ajouter collaborateur <i class="fa fa-plus" aria-hidden="true"></i></button>
-                    </div>
+                        </div>
 
 
-                    <div class="alert alert-success collapse alert-dismissible" id="managerAdd">
-                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                        Manager ajouté avec succès!
-                    </div>
+                        <div class="alert alert-success collapse alert-dismissible" id="managerAdd">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            Manager ajouté avec succès!
+                        </div>
 
-                    <div class="alert alert-success collapse alert-dismissible" id="userAdd">
-                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                        Utilisateur ajouté avec succès!
-                    </div>
+                        <div class="alert alert-success collapse alert-dismissible" id="userAdd">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            Utilisateur ajouté avec succès!
+                        </div>
 
-                    <div class="alert alert-success collapse alert-dismissible" id="userEdit">
-                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                        Collaborateur modifié avec succès!
-                    </div>
+                        <div class="alert alert-success collapse alert-dismissible" id="userEdit">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            Collaborateur modifié avec succès!
+                        </div>
 
-                    <div class="alert alert-success collapse alert-dismissible" id="userDelete">
-                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                        Collaborateur supprimé avec succès!
-                    </div>
+                        <div class="alert alert-success collapse alert-dismissible" id="userDelete">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            Collaborateur supprimé avec succès!
+                        </div>
 
                         <table class="table table-bordered">
                             <thead>
@@ -48,7 +48,7 @@
                             </thead>
                             <tbody>
                             <tr v-for="collaborateur in collaborateurs">
-                                <td><img class="rounded-circle" style="display:block;" width="80" height="80"  :src="collaborateur.image"/></td>
+                                <td><img class="img-circle" style="display:block;" width="80" height="80"  :src="collaborateur.image"/></td>
                                 <td>{{collaborateur.fullName}}</td>
                                 <td>{{collaborateur.date_naissance}}</td>
                                 <td>{{collaborateur.email}}</td>
@@ -60,262 +60,261 @@
 
 
                                 <td style='white-space: nowrap'>
-                                    <button type="button" class="btn btn-warning" @click.prevent="editCollaborateur( collaborateur, collaborateur.service, collaborateur.manager )" ><i class="fa fa-pencil" aria-hidden="true"></i></button>
+                                    <button type="button" class="btn btn-warning" @click.prevent="editCollaborateur( collaborateur, collaborateur.service, collaborateur.manager )" data-toggle="modal" data-target="#edit-item" ><i class="fa fa-pencil" aria-hidden="true"></i></button>
                                     <button type="button" class="btn btn-danger" @click.prevent="deleteCollaborateur( collaborateur )"><i class="fa fa-trash" aria-hidden="true"></i></button>
                                 </td>
                             </tr>
                             </tbody>
                         </table>
                     </div>
-            <!-- Create Collab Modal -->
-            <div class="modal fade" id="create-item" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title"> Ajouter collaborateur </h5>
-                            <button type="button" @click="ajouterBtn" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                        <form id= "myForm" method="post" enctype="multipart/form-data" @submit.prevent="createCollaborateur">
+                    <!-- Create Collab Modal -->
+                    <div class="modal fade" id="create-item" style="display: none;">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title"> Ajouter collaborateur </h5>
+                                    <button type="button" @click="ajouterBtn" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form id= "myForm" method="post" enctype="multipart/form-data" @submit.prevent="createCollaborateur">
 
-                                <div class="col-lg-12">
-                                    <div class="form-group">
-                                        <label>Image: </label><span class="required">*</span>
-                                        <div class="image-preview" v-if="newItem.image.length > 0">
-                                            <img  id="preview" class="preview" :src="newItem.image">
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+                                                <label>Image: </label><span class="required">*</span>
+                                                <div class="image-preview" v-if="newItem.image.length > 0">
+                                                    <img  id="preview" class="preview" :src="newItem.image">
+                                                </div>
+                                                <input required type="file" @change="imageChangedOnCreate"  class="form-control">
+                                            </div>
                                         </div>
-                                        <input required type="file" @change="imageChangedOnCreate"  class="form-control">
-                                    </div>
-                                </div>
 
-                                <div class="col-lg-12">
-                                    <div class="form-group">
-                                        <label>Nom: </label> <span class="required">*</span>
-                                        <input name= "nom" type="text" v-validate= "'required|alpha_spaces'" :class="{'input': true, 'is-danger': errors.has('nom') }" class="form-control" v-model="newItem.nom">
-                                        <i v-show="errors.has('nom')" class="fa fa-warning"></i>
-                                        <span v-show="errors.has('nom')" class="" style="color: red">{{ errors.first('nom') }}</span>
-                                    </div>
-                                </div>
-
-                                <div class="col-lg-12">
-                                    <div class="form-group">
-                                        <label>Prenom: </label> <span class="required">*</span>
-                                        <input name= "prenom" type="text" v-validate= "'required|alpha_spaces'" :class="{'input': true, 'is-danger': errors.has('prenom') }" class="form-control" v-model="newItem.prenom">
-                                        <i v-show="errors.has('prenom')" class="fa fa-warning"></i>
-                                        <span v-show="errors.has('prenom')" class="" style="color: red">{{ errors.first('prenom') }}</span>
-                                    </div>
-                                </div>
-
-                                <div class="col-lg-12">
-                                    <div class="form-group">
-                                        <label>Adresse: </label> <span class="required">*</span>
-                                        <input name= "adresse" type="text" v-validate= "'required'" :class="{'input': true, 'is-danger': errors.has('adresse') }" class="form-control" v-model="newItem.adresse">
-                                        <i v-show="errors.has('adresse')" class="fa fa-warning"></i>
-                                        <span v-show="errors.has('adresse')" class="" style="color: red">{{ errors.first('adresse') }}</span>
-                                    </div>
-                                </div>
-
-                                <div class="col-lg-12">
-                                    <div class="form-group">
-                                            <label>Post: </label> <span class="required">*</span>
-                                            <input name= "post" type="text" v-validate= "'required|alpha_spaces'" :class="{'input': true, 'is-danger': errors.has('post') }" class="form-control" v-model="newItem.post">
-                                            <i v-show="errors.has('post')" class="fa fa-warning"></i>
-                                            <span v-show="errors.has('post')" class="" style="color: red">{{ errors.first('post') }}</span>
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+                                                <label>Nom: </label> <span class="required">*</span>
+                                                <input name= "nom" type="text" v-validate= "'required|alpha_spaces'" :class="{'input': true, 'is-danger': errors.has('nom') }" class="form-control" v-model="newItem.nom">
+                                                <i v-show="errors.has('nom')" class="fa fa-warning"></i>
+                                                <span v-show="errors.has('nom')" class="" style="color: red">{{ errors.first('nom') }}</span>
+                                            </div>
                                         </div>
+
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+                                                <label>Prenom: </label> <span class="required">*</span>
+                                                <input name= "prenom" type="text" v-validate= "'required|alpha_spaces'" :class="{'input': true, 'is-danger': errors.has('prenom') }" class="form-control" v-model="newItem.prenom">
+                                                <i v-show="errors.has('prenom')" class="fa fa-warning"></i>
+                                                <span v-show="errors.has('prenom')" class="" style="color: red">{{ errors.first('prenom') }}</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+                                                <label>Adresse: </label> <span class="required">*</span>
+                                                <input name= "adresse" type="text" v-validate= "'required'" :class="{'input': true, 'is-danger': errors.has('adresse') }" class="form-control" v-model="newItem.adresse">
+                                                <i v-show="errors.has('adresse')" class="fa fa-warning"></i>
+                                                <span v-show="errors.has('adresse')" class="" style="color: red">{{ errors.first('adresse') }}</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+                                                <label>Post: </label> <span class="required">*</span>
+                                                <input name= "post" type="text" v-validate= "'required|alpha_spaces'" :class="{'input': true, 'is-danger': errors.has('post') }" class="form-control" v-model="newItem.post">
+                                                <i v-show="errors.has('post')" class="fa fa-warning"></i>
+                                                <span v-show="errors.has('post')" class="" style="color: red">{{ errors.first('post') }}</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+                                                <label >Email: <span class="required">*</span> </label>
+                                                <input name= "email" v-model="newItem.email" required  v-validate="'required|email'" :class="{'input': true, 'is-danger': errors.has('email') }" class="form-control" >
+                                                <span v-show="errors.has('email')" style="color: red" class="text-danger">{{ errors.first('email') }}</span>
+
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+                                                <label>Telephone: <span class="required">*</span> </label>
+                                                <input name="telephone" v-validate="'required'" :class="{'input': true, 'is-danger': errors.has('telephone') }" type="text" class="form-control" v-model="newItem.telephone">
+                                                <i v-show="errors.has('telephone')" class="fa fa-warning"></i>
+                                                <span v-show="errors.has('telephone')" class="" style="color: red">{{ errors.first('telephone') }}</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+                                                <label>Date de naissance: <span class="required">*</span> </label>
+                                                <input name= "date" type="date"  :class="{'input': true, 'is-danger': errors.has('date') }" v-validate="'required|date_format:YYYY-MM-DD'" placeholder="Choisissez une date"  class="form-control" v-model="newItem.date_naissance">
+                                                <i v-show="errors.has('date')" class="fa fa-warning"></i>
+                                                <span v-show="errors.has('date')" class="" style="color: red">{{ errors.first('date') }}</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-12">
+                                            <label>Service: </label> <span class="required">*</span>
+                                            <select class="form-control" v-model="newItem.service">
+                                                <option v-for="service in services" :value="service">
+                                                    {{service.nom}} </option>
+                                            </select>
+
+                                        </div>
+
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+
+                                                <span> Etes-vous un manager?</span>
+                                                <input type="radio" name="radio" v-model="newItem.is_manager"  value="1">
+                                                <label> Oui </label>
+                                                <input type="radio" name="radio" v-model="newItem.is_manager" @click="showManagerDefault()" value="0">
+                                                <label> Non </label>
+                                                <br>
+                                            </div>
+                                            <div class="col-lg-12" v-if="newItem.is_manager == '0'">
+                                                <label>Choisissez votre manager: </label>
+                                                <select class="form-control" v-model="newItem.manager">
+                                                    <option selected="selected" disabled="true"> --Please Select -- </option>
+                                                    <option v-for="manager in managers" :value="manager">
+                                                        {{manager.fullName}} </option>
+                                                </select>
+
+                                            </div>
+
+                                        </div>
+                                        <!-- thisone-->
+
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-primary">Save</button>
+                                        </div>
+                                    </form>
                                 </div>
-                                <div class="col-lg-12">
-                                    <div class="form-group">
-                                        <label >Email: <span class="required">*</span> </label>
-                                       <input name= "email" v-model="newItem.email" required  v-validate="'required|email'" :class="{'input': true, 'is-danger': errors.has('email') }" class="form-control" >
-                                        <span v-show="errors.has('email')" style="color: red" class="text-danger">{{ errors.first('email') }}</span>
-
-                                    </div>
-                                </div>
-                                <div class="col-lg-12">
-                                    <div class="form-group">
-                                        <label>Telephone: <span class="required">*</span> </label>
-                                        <input name="telephone" v-validate="'required'" :class="{'input': true, 'is-danger': errors.has('telephone') }" type="text" class="form-control" v-model="newItem.telephone">
-                                        <i v-show="errors.has('telephone')" class="fa fa-warning"></i>
-                                        <span v-show="errors.has('telephone')" class="" style="color: red">{{ errors.first('telephone') }}</span>
-                                    </div>
-                                </div>
-                                <div class="col-lg-12">
-                                    <div class="form-group">
-                                        <label>Date de naissance: <span class="required">*</span> </label>
-                                        <input name= "date" type="date"  :class="{'input': true, 'is-danger': errors.has('date') }" v-validate="'required|date_format:YYYY-MM-DD'" placeholder="Choisissez une date"  class="form-control" v-model="newItem.date_naissance">
-                                        <i v-show="errors.has('date')" class="fa fa-warning"></i>
-                                        <span v-show="errors.has('date')" class="" style="color: red">{{ errors.first('date') }}</span>
-                                    </div>
-                                </div>
-
-                                <div class="col-lg-12">
-                                    <label>Service: </label> <span class="required">*</span>
-                                    <select class="form-control" v-model="newItem.service">
-                                    <option v-for="service in services"
-                                            :value="service">
-                                        {{service.nom}} </option>
-                                </select>
-
-                                </div>
-
-                                <div class="col-lg-12">
-                                    <div class="form-group">
-
-                                        <span> Etes-vous un manager?</span>
-                                        <input type="radio" name="radio" v-model="newItem.is_manager"  value="1">
-                                        <label> Oui </label>
-                                        <input type="radio" name="radio" v-model="newItem.is_manager" @click="showManagerDefault()" value="0">
-                                        <label> Non </label>
-                                        <br>
-                                    </div>
-                                    <div class="col-lg-12" v-if="newItem.is_manager == '0'">
-                                        <label>Choisissez votre manager: </label>
-                                        <select class="form-control" v-model="newItem.manager">
-                                            <option selected="selected" disabled="true"> --Please Select -- </option>
-                                            <option v-for="manager in managers" :value="manager">
-                                                {{manager.fullName}} </option>
-                                        </select>
-
-                                    </div>
-
-                                </div>
-                         <!-- thisone-->
-
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-primary">Save</button>
                             </div>
-                        </form>
+                        </div>
                     </div>
+
+                    <!-- Edit Collab Modal -->
+                    <div class="modal fade" id="edit-item" style="display: none;">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title"> Modifier collaborateur </h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <form method="post" enctype="multipart/form-data" @submit.prevent="updateCollaborateur(fillItem.id)">
+                                    <input type="hidden" name="_method" value="PUT">
+                                    <div class="modal-body">
+
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+                                                <label>Image: </label><span class="required">*</span>
+                                                <div class="image-preview" v-if="fillItem.image.length > 0">
+                                                    <img class="preview" :src="fillItem.image">
+                                                </div>
+                                                <input type="file" @change="imageChangedOnUpdate"  class="form-control">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+                                                <label>Nom: </label> <span class="required">*</span>
+                                                <input name= "nom" type="text" v-validate= "'required|alpha_spaces'" :class="{'input': true, 'is-danger': errors.has('nom') }" class="form-control" v-model="fillItem.nom">
+                                                <i v-show="errors.has('nom')" class="fa fa-warning"></i>
+                                                <span v-show="errors.has('nom')" class="" style="color: red">{{ errors.first('nom') }}</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+                                                <label>Prenom: </label> <span class="required">*</span>
+                                                <input name= "prenom" type="text" v-validate= "'required|alpha_spaces'" :class="{'input': true, 'is-danger': errors.has('prenom') }" class="form-control" v-model="fillItem.prenom">
+                                                <i v-show="errors.has('prenom')" class="fa fa-warning"></i>
+                                                <span v-show="errors.has('prenom')" class="" style="color: red">{{ errors.first('prenom') }}</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+                                                <label>Adresse: </label> <span class="required">*</span>
+                                                <input name= "adresse" type="text" v-validate= "'required'" :class="{'input': true, 'is-danger': errors.has('adresse') }" class="form-control" v-model="fillItem.adresse">
+                                                <i v-show="errors.has('adresse')" class="fa fa-warning"></i>
+                                                <span v-show="errors.has('adresse')" class="" style="color: red">{{ errors.first('adresse') }}</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+                                                <label>Post: </label> <span class="required">*</span>
+                                                <input name= "post" type="text" v-validate= "'required|alpha_spaces'" :class="{'input': true, 'is-danger': errors.has('post') }" class="form-control" v-model="fillItem.post">
+                                                <i v-show="errors.has('post')" class="fa fa-warning"></i>
+                                                <span v-show="errors.has('post')" class="" style="color: red">{{ errors.first('post') }}</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+                                                <label >Email: <span class="required">*</span> </label>
+                                                <input name= "email" v-model="fillItem.email" required  v-validate="'required|email'" :class="{'input': true, 'is-danger': errors.has('email') }" class="form-control" >
+                                                <span v-show="errors.has('email')" style="color: red" class="text-danger">{{ errors.first('email') }}</span>
+
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+                                                <label>Telephone: <span class="required">*</span> </label>
+                                                <input name="telephone" v-validate="'required'" :class="{'input': true, 'is-danger': errors.has('telephone') }" type="text" class="form-control" v-model="fillItem.telephone">
+                                                <i v-show="errors.has('telephone')" class="fa fa-warning"></i>
+                                                <span v-show="errors.has('telephone')" class="" style="color: red">{{ errors.first('telephone') }}</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+                                                <label>Date de naissance: <span class="required">*</span> </label>
+                                                <input type="date"  :class="{'input': true, 'is-danger': errors.has('date') }" v-validate="'required|date_format:YYYY-MM-DD'" placeholder="Choisissez une date"  class="form-control" v-model="fillItem.date_naissance">
+                                                <i v-show="errors.has('date')" class="fa fa-warning"></i>
+                                                <span v-show="errors.has('date')" class="" style="color: red">{{ errors.first('date') }}</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12">
+                                            <label>Service: </label> <span class="required">*</span>
+                                            <select class="form-control" v-model="fillItem.service">
+                                                <option v-for="service in services" :value="service" >
+                                                    {{service.nom}} </option>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+                                                <span> Etes-vous un manager?</span>
+                                                <input type="radio" name="radio" v-model="fillItem.is_manager" value="1">
+                                                <label> Oui </label>
+                                                <input type="radio" name="radio" v-model="fillItem.is_manager" value="0">
+                                                <label> Non </label>
+                                                <br>
+                                            </div>
+                                            <div class="col-lg-12" v-if="fillItem.is_manager == '0'">
+                                                <label>Choisissez votre manager: </label>
+                                                <select class="form-control" v-model="fillItem.manager">
+                                                    <option v-for="manager in managers" :value="manager">
+                                                        {{manager.nom}} {{manager.prenom}} </option>
+                                                </select>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-primary">Save</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
                     </div>
+
                 </div>
             </div>
-
-            <!-- Edit Collab Modal -->
-            <div class="modal fade" id="edit-item" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title"> Modifier collaborateur </h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <form method="post" enctype="multipart/form-data" @submit.prevent="updateCollaborateur(fillItem.id)">
-                            <input type="hidden" name="_method" value="PUT">
-                            <div class="modal-body">
-
-                                <div class="col-lg-12">
-                                    <div class="form-group">
-                                        <label>Image: </label><span class="required">*</span>
-                                        <div class="image-preview" v-if="fillItem.image.length > 0">
-                                            <img class="preview" :src="fillItem.image">
-                                        </div>
-                                        <input type="file" @change="imageChangedOnUpdate"  class="form-control">
-                                    </div>
-                                </div>
-
-                                <div class="col-lg-12">
-                                    <div class="form-group">
-                                        <label>Nom: </label> <span class="required">*</span>
-                                        <input name= "nom" type="text" v-validate= "'required|alpha_spaces'" :class="{'input': true, 'is-danger': errors.has('nom') }" class="form-control" v-model="fillItem.nom">
-                                        <i v-show="errors.has('nom')" class="fa fa-warning"></i>
-                                        <span v-show="errors.has('nom')" class="" style="color: red">{{ errors.first('nom') }}</span>
-                                    </div>
-                                </div>
-
-                                <div class="col-lg-12">
-                                    <div class="form-group">
-                                        <label>Prenom: </label> <span class="required">*</span>
-                                        <input name= "prenom" type="text" v-validate= "'required|alpha_spaces'" :class="{'input': true, 'is-danger': errors.has('prenom') }" class="form-control" v-model="fillItem.prenom">
-                                        <i v-show="errors.has('prenom')" class="fa fa-warning"></i>
-                                        <span v-show="errors.has('prenom')" class="" style="color: red">{{ errors.first('prenom') }}</span>
-                                    </div>
-                                </div>
-
-                                <div class="col-lg-12">
-                                    <div class="form-group">
-                                        <label>Adresse: </label> <span class="required">*</span>
-                                        <input name= "adresse" type="text" v-validate= "'required'" :class="{'input': true, 'is-danger': errors.has('adresse') }" class="form-control" v-model="fillItem.adresse">
-                                        <i v-show="errors.has('adresse')" class="fa fa-warning"></i>
-                                        <span v-show="errors.has('adresse')" class="" style="color: red">{{ errors.first('adresse') }}</span>
-                                    </div>
-                                </div>
-
-                                <div class="col-lg-12">
-                                    <div class="form-group">
-                                        <label>Post: </label> <span class="required">*</span>
-                                        <input name= "post" type="text" v-validate= "'required|alpha_spaces'" :class="{'input': true, 'is-danger': errors.has('post') }" class="form-control" v-model="fillItem.post">
-                                        <i v-show="errors.has('post')" class="fa fa-warning"></i>
-                                        <span v-show="errors.has('post')" class="" style="color: red">{{ errors.first('post') }}</span>
-                                    </div>
-                                </div>
-                                <div class="col-lg-12">
-                                    <div class="form-group">
-                                        <label >Email: <span class="required">*</span> </label>
-                                        <input name= "email" v-model="fillItem.email" required  v-validate="'required|email'" :class="{'input': true, 'is-danger': errors.has('email') }" class="form-control" >
-                                        <span v-show="errors.has('email')" style="color: red" class="text-danger">{{ errors.first('email') }}</span>
-
-                                    </div>
-                                </div>
-                                <div class="col-lg-12">
-                                    <div class="form-group">
-                                        <label>Telephone: <span class="required">*</span> </label>
-                                        <input name="telephone" v-validate="'required'" :class="{'input': true, 'is-danger': errors.has('telephone') }" type="text" class="form-control" v-model="fillItem.telephone">
-                                        <i v-show="errors.has('telephone')" class="fa fa-warning"></i>
-                                        <span v-show="errors.has('telephone')" class="" style="color: red">{{ errors.first('telephone') }}</span>
-                                    </div>
-                                </div>
-                                <div class="col-lg-12">
-                                    <div class="form-group">
-                                        <label>Date de naissance: <span class="required">*</span> </label>
-                                        <input type="date"  :class="{'input': true, 'is-danger': errors.has('date') }" v-validate="'required|date_format:YYYY-MM-DD'" placeholder="Choisissez une date"  class="form-control" v-model="fillItem.date_naissance">
-                                        <i v-show="errors.has('date')" class="fa fa-warning"></i>
-                                        <span v-show="errors.has('date')" class="" style="color: red">{{ errors.first('date') }}</span>
-                                    </div>
-                                </div>
-                                <div class="col-lg-12">
-                                    <label>Service: </label> <span class="required">*</span>
-                                    <select class="form-control" v-model="fillItem.service">
-                                        <option v-for="service in services" :value="service" >
-                                            {{service.nom}} </option>
-                                    </select>
-                                </div>
-
-                                <div class="col-lg-12">
-                                    <div class="form-group">
-                                        <span> Etes-vous un manager?</span>
-                                        <input type="radio" name="radio" v-model="fillItem.is_manager" value="1">
-                                        <label> Oui </label>
-                                        <input type="radio" name="radio" v-model="fillItem.is_manager" value="0">
-                                        <label> Non </label>
-                                        <br>
-                                    </div>
-                                    <div class="col-lg-12" v-if="fillItem.is_manager == '0'">
-                                        <label>Choisissez votre manager: </label>
-                                        <select class="form-control" v-model="fillItem.manager">
-                                            <option v-for="manager in managers" :value="manager">
-                                                {{manager.nom}} {{manager.prenom}} </option>
-                                        </select>
-                                    </div>
-
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-primary">Save</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-
         </div>
-        </div>
-    </div>
-</section>
+    </section>
 </template>
 
 <script>
@@ -400,6 +399,8 @@
                     this.getCollaborateurs();
                     $('#userAdd').show();
 
+                    $('.modal-backdrop').remove();
+
                 }).catch( (error) => {
                     console.log("helloError");
                     console.log(error);
@@ -454,7 +455,7 @@
                     this.fillItem = { 'nom': '', 'prenom': '', 'image': '', 'post': '', 'date_naissance': '', 'email':'', 'telephone': '', 'adresse': '', 'image': '', 'service_id':'', 'is_manager':'', 'manager_id':'', 'service':{}, 'manager': {}, 'id':''};
                     $('#edit-item').modal('hide');
 
-
+                    $('.modal-backdrop').remove();
                 }).catch( (error)=> {
                     console.log( error.response.data )
                 })
@@ -470,7 +471,7 @@
                     }
                     reader.readAsDataURL(input.files[0]);
                 }
-           },
+            },
 
             imageChangedOnUpdate(event) {
 

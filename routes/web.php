@@ -102,7 +102,7 @@ Route::group(['prefix' => 'manager', 'middleware' => 'manager'], function() {
 });
 
 Route::get('ajouter_managers', 'UserController@addManagers');
-Route::post('ajouter_managers', 'UserController@addManagersFunc');
+Route::post('ajouter_manager/{id}', 'UserController@addManagersFunc');
 Route::post('remove_manager/{id}', 'UserController@removeManager');
 
 
@@ -124,3 +124,21 @@ Route::post('edit/{email}', 'UserController@editProfile');
 
 Route::get('mes_demandes/{id}', 'DemandeController@afficherDemandesJson');
 Route::post('post_comment/{ticket_id}', 'CommentsController@addComment');
+
+// files
+
+Route::get('file','FileController@create');
+Route::post('file','FileController@store');
+Route::get('all_files', 'FileController@showFiles');
+Route::get('filesJson', 'FileController@showFilesJson');
+Route::post('deleteFile/{id}', 'FileController@deleteFile');
+
+// Marketplace
+
+
+
+Route::get('/multiuploads', 'MarketController@uploadForm');
+Route::post('/multiuploads', 'MarketController@uploadSubmit');
+
+// Marketplace mobile
+Route::get('/showMarket', 'MarketController@showMarket');

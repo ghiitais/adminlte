@@ -9,20 +9,21 @@
 
 <div class="box">
   <div class="box-header with-border">
-    <h3 class="box-title">#{{ $ticket->ticket_id }} - {{ $ticket->title }}</h3>
+    <h3 class="box-title">#{{ $ticket->ticket_id }} - {{ $ticket->title }} par <strong
+        >{{$ticket->user->name}}</strong></h3>
   </div>
   <div class="box-body">
         @include('includes.flash')
-        <p>{{ $ticket->message }}</p>
-        <p>Category: {{ $category->name }}</p>
+        <p> <h4> {{ $ticket->message }} </h4></p>
+        <p> <b> Categorie: </b> {{ $category->name }}</p>
         <p>
             @if ($ticket->status === 'Open')
-                Status: <span class="badge bg-green">{{ $ticket->status }}</span>
+                <b>Statut: </b> <span class="badge bg-green">{{ $ticket->status }}</span>
             @else
-                Status: <span class="badge bg-red">{{ $ticket->status }}</span>
+                <b>Statut: </b> <span class="badge bg-red">{{ $ticket->status }}</span>
             @endif
         </p>
-        <p>Created on: {{ $ticket->created_at->diffForHumans() }}</p>    
+      <p> <b>Crée : </b>{{ $ticket->created_at->diffForHumans() }}</p>
         <p><h3>Commentaires</h3></p>
 
         @foreach ($comments as $comment)
@@ -32,8 +33,8 @@
             <div class="box box-success">
             @endif
                 <div class="box-header with-border">
-                    <h3 class="box-title">{{ $comment->user->name }}
-                    <span class="pull-right">{{ $comment->created_at->diffForHumans() }}</span></h3>
+                    <h4 class="box-title"> <em> {{ $comment->user->name }} </em></h4>
+                    <span class="pull-right">{{ $comment->created_at->diffForHumans() }}</span>
                 </div>
                 <div class="box-body">
                     {{ $comment->comment }}
@@ -58,7 +59,7 @@
                         </div>
 
                         <div class="form-group">
-                            <button type="submit" class="btn btn-primary">Submit</button>
+                            <button type="submit" class="btn btn-primary">Envoyer</button>
                         </div>
                     </form>
   </div>

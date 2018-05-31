@@ -9,21 +9,21 @@
 <section class="content">
       <div class="box">
         <div class="box-header with-border">
-          <h3 class="box-title"><i class="fa fa-ticket"> </i> Tickets </i></h3>
+          <h3 class="box-title"><i class="fa fa-tags"> </i> Tickets </i> </h3>
         </div>
         <div class="box-body">
         @if ($tickets->isEmpty())
-                        <p>There are currently no tickets.</p>
+                        <p>Aucun ticket pour le moment.</p>
                     @else
                         <table class="table table-bordered">
                             <thead>
                             <tr>
                                 <th>ID </th>
-                                <th>Opened by</th>
-                                <th>Category</th>
-                                <th>Title</th>
-                                <th>Status</th>
-                                <th>Last Updated</th>
+                                <th>Crée par</th>
+                                <th>Categorie</th>
+                                <th>Titre</th>
+                                <th>Statut</th>
+                                <th>Crée le</th>
                                 <th style="text-align:center" colspan="2">Actions</th>
                             </tr>
                             </thead>
@@ -43,19 +43,19 @@
                                     <td>{{ $ticket->title }}</td>
                                     <td>
                                         @if ($ticket->status === 'Open')
-                                            <span class="badge bg-green">{{ $ticket->status }}</span>
+                                            <span class="badge bg-green">Ouvert</span>
                                         @else
-                                            <span class="badge bg-red">{{ $ticket->status }}</span>
+                                            <span class="badge bg-red">Fermé</span>
                                         @endif
                                     </td>
                                     <td>{{ $ticket->updated_at->diffForHumans() }}</td>
                                     <td>
-                                        <a href="{{ url('tickets/' . $ticket->ticket_id) }}" class="btn btn-primary">Comment</a>
+                                        <a href="{{ url('tickets/' . $ticket->ticket_id) }}" class="btn btn-primary">Commenter</a>
                                     </td>
                                     <td>
                                         <form action="{{ url('admin/close_ticket/' . $ticket->ticket_id) }}" @if (\Illuminate\Support\Facades\Auth::user()->is_admin != 1) hidden @endif method="POST">
                                             {!! csrf_field() !!}
-                                            <button type="submit" class="btn btn-danger">Close</button>
+                                            <button type="submit" class="btn btn-danger">Fermer</button>
                                         </form>
                                     </td>
                                 </tr>

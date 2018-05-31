@@ -11,7 +11,7 @@
 @section('content')
 <section class="content-header">
       <h1>
-      <i class="fa fa-ticket"></i>Demandes crées par les collaborateurs
+      <i class="fa fa-files"></i>Demandes crées par les collaborateurs
       </h1>
 </section>
 
