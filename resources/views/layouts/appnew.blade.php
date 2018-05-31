@@ -235,7 +235,7 @@
             </a>
             <ul class="treeview-menu">
               <li><a href="{{url('multiuploads')}}"><i class="fa fa-share"></i> Partager </a></li>
-              <li><a href="#"><i class="fa  fa-eye"></i> Consulter</a></li>
+              <li><a href="{{ route('itemsview.index') }}"><i class="fa  fa-eye"></i> Consulter</a></li>
             </ul>
           </li>
         

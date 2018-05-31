@@ -138,6 +138,13 @@ Route::post('deleteFile/{id}', 'FileController@deleteFile');
 
 
 Route::get('/multiuploads', 'MarketController@uploadForm');
+
+Route::resource('itemsview', 'MarketController');
+
+Route::get('/itemsview/delete/{id}', 'MarketController@delete');
+Route::get('/itemsview/{id}/view', 'MarketController@show');
+
+Route::get('/datatable', 'MarketController@getdatatable')->name('datatable');
 Route::post('/multiuploads', 'MarketController@uploadSubmit');
 
 // Marketplace mobile
