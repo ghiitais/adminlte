@@ -56,7 +56,7 @@
                     {data: "seller"},
                     {data: "price"},
                     {data: "details"},
-                    {data: "image"},                    
+                    {data: "image"},
                     {data: "action", orderable: false, searchable: false},
                 ]
             });
@@ -67,12 +67,12 @@
                 var id = $(this).attr('val');
                 var token = $(this).data('token');
                 swal({
-                        title: "Are you sure?",
-                        text: "You will not be able to recover this!",
+                        title: "Etes-vous sûrs? ",
+                        text: "Vous ne pourrez plus récupérer ça",
                         type: "warning",
                         showCancelButton: true,
                         confirmButtonColor: "#DD6B55",
-                        confirmButtonText: "Yes, delete it!",
+                        confirmButtonText: "Confirmer",
                         closeOnConfirm: false
                     },
                     function () {
@@ -85,11 +85,11 @@
                             },
                             success: function (data) {
                                 otable.draw();
-                                swal("Deleted!", "Item has been deleted.", "success");
+                                swal("Supprimé!", "L'article a été supprimé", "success");
                             },
                             error: function (data) {
                                 otable.draw();
-                                swal("Oops!", "Something went wrong", "error");
+                                swal("Oops!", "Une erreur s'est produite", "error");
                             }
                         });
 
@@ -107,7 +107,7 @@
                     },
                     complete: function (data) {
                         
-                        toastr.success("Record Successfully Modified.");
+                        toastr.success("Article modifié avec succès");
 
                     },
                     error: function (result) {
