@@ -20,6 +20,8 @@ class VerifyCsrfToken extends Middleware
         'login',
         'loginUser',
         'edit/*',
-        'post_comment/*'
+        'post_comment/*',
+        'multiuploads',
+        'uploadImages'
     ];
 }

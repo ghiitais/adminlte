@@ -149,3 +149,4 @@ Route::post('/multiuploads', 'MarketController@uploadSubmit');
 
 // Marketplace mobile
 Route::get('/showMarket', 'MarketController@showMarket');
+Route::post('uploadImages', 'MarketController@uploadImages');

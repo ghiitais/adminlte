@@ -64,13 +64,12 @@ class MarketController extends Controller
 
         }
     }
-        return redirect()->back()->with('status', 'Produit ajouté avec succès');
+        return redirect()->back()->with('status', 'Produit modifié avec succès');
     }
 
     public function uploadSubmit(Request $request)
 
     {
-        $item = new Item();
 
         $this->validate($request, [
 
@@ -80,24 +79,59 @@ class MarketController extends Controller
 
         ]);
 
-
         $item = Item::create($request->all());
-
 
         foreach ($request->photos as $photo) {
 
-
             $name = $photo->getClientOriginalName();
+
             $photo->move(public_path().'/market/', $name);
 
-            ItemDetails::create([
+           $itemDetails = new ItemDetails ([
                 'item_id' => $item->id,
                 'filename' => $name
             ]);
-
+           $itemDetails->save();
         }
+
         return redirect()->back()->with('status', 'Produit ajouté avec succès');
-  }
+
+    }
+
+    public function uploadImages(Request $request)
+    {
+        $item = new Item([
+            'name' => $request->name,
+            'price' => $request->price,
+            'details' => $request->details,
+            'user_id' => $request->user_id
+        ]);
+
+        $item->save();
+
+        foreach ($request->photos as $photo) {
+            $name = $photo->getClientOriginalName();
+
+            $photo->move(public_path().'/market/', $name);
+
+            $item->itemDetails()->create([
+                'filename' => $name
+            ]);
+        }
+
+        if ($item->itemDetails()->count() > 0 ) {
+            return response()->json([
+                'status'=> 'success',
+
+            ]);
+        } else {
+            return response()->json([
+                'status'=> 'failure'
+            ], 303);
+        }
+
+    }
+
   public function showMarket() {
         $items = Item::with('itemDetails', 'user')->get();
         return $items;
