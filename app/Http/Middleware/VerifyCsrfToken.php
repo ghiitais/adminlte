@@ -22,6 +22,8 @@ class VerifyCsrfToken extends Middleware
         'edit/*',
         'post_comment/*',
         'multiuploads',
-        'uploadImages'
+        'uploadImages',
+        'add_demande',
+        'closeTicket/*'
     ];
 }

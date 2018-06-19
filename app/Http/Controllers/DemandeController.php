@@ -64,6 +64,38 @@ class DemandeController extends Controller
 
         return redirect()->back()->with("status", "La demande identifiée par: #$request->demande_id a été envoyée à l'administration.");
     }
+
+    // mobile add demande
+public function addDemande(Request $request) {
+    $demande = new Demande([
+        'user_id' => $request->user_id,
+        'demande_id' => $request->demande_id,
+        'priority' => $request->priority,
+        'type' => $request->type,
+        'firstDay'=> $request->firstDay,
+        'lastDay'=>$request->lastDay,
+        'arriveOn'=>$request->arriveOn,
+        'totalDays'=>$request->totalDays,
+        'congeType'=>$request->congeType,
+        "status" => "En attente"
+
+    ]);
+
+if ($demande->save()){
+    return response()->json([
+        'status'=>'success',
+
+
+    ]);
+} else {
+    return response()->json([
+        'status'=>'failure',
+
+
+    ]);
+}
+}
+
 public function demandeDetails($demande_id) {
         $demande = Demande::where('demande_id', $demande_id)->firstOrFail();
         return view('demandes.showDetails', compact('demande'));

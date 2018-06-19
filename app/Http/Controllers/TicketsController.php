@@ -77,8 +77,34 @@ public function addTicket(Request $request){
         ]);
     }
 
-
 }
+    public function closeTicket(Request $request, $id) {
+        $ticket = Ticket::findOrFail($id);
+if($ticket->status == "Open") {
+    $ticket->status = "Closed";
+    if($ticket->save()){
+        return response()->json([
+            'status'=>'success',
+            'ticket_status'=>$ticket->status
+
+        ]);
+    } else {
+            return response()->json([
+                'status'=>'failure',
+                'ticket_status'=>$ticket->status
+
+            ]);
+        }
+    } else {
+    return response()->json([
+        'status'=>'failure',
+        'ticket_status'=>$ticket->status
+
+    ]);
+}
+}
+
+
         public function userTickets()
         {
             $tickets = Ticket::where('user_id', Auth::user()->id)->paginate(10);

@@ -15,7 +15,7 @@
                     @if ($files->isEmpty())
                         <p>Aucun fichier n'a été crée uploadé</p>
                     @else
-                        <table class="table table-bordered">
+                        <table id= "example" class="table table-bordered">
                             <thead>
 
                             <tr>
@@ -60,3 +60,12 @@
 
     </div>
 @endsection
+@section('script')
+    <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.16/datatables.min.js"></script>
+<script>
+
+    $(document).ready(function() {
+        $('#example').DataTable();
+    } );
+</script>
+    @endsection

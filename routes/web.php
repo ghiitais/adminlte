@@ -124,6 +124,7 @@ Route::post('edit/{email}', 'UserController@editProfile');
 
 Route::get('mes_demandes/{id}', 'DemandeController@afficherDemandesJson');
 Route::post('post_comment/{ticket_id}', 'CommentsController@addComment');
+Route::post('add_demande', 'DemandeController@addDemande');
 
 // files
 
@@ -150,3 +151,6 @@ Route::post('/multiuploads', 'MarketController@uploadSubmit');
 // Marketplace mobile
 Route::get('/showMarket', 'MarketController@showMarket');
 Route::post('uploadImages', 'MarketController@uploadImages');
+
+// Close ticket mobile
+Route::post('closeTicket/{id}', 'TicketsController@closeTicket');

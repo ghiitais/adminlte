@@ -19,10 +19,10 @@
                                width="100%">
                             <thead>
                             <tr>
-                                <th>Name</th>
-                                <th>Seller</th>
-                                <th>Price</th>
-                                <th>Detail</th>
+                                <th>Nom</th>
+                                <th>Vendeur</th>
+                                <th>Prix</th>
+                                <th>Details</th>
                                 <th>Image</th>
                                 <th width="15%">Action</th>
                             </tr>
@@ -30,7 +30,6 @@
                             <tbody>
                             </tbody>
                         </table>
-            
 
         </div>
     </div>
