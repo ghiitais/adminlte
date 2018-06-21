@@ -24,6 +24,8 @@ class VerifyCsrfToken extends Middleware
         'multiuploads',
         'uploadImages',
         'add_demande',
-        'closeTicket/*'
+        'closeTicket/*',
+        'upload_event',
+        'participate/*'
     ];
 }

@@ -56,4 +56,9 @@ class User extends Authenticatable
     public function managers(){
         return $this->belongsToMany(User::class, 'user_manager', 'user_id', 'manager_id');
     }
+
+    public function events(){
+        return $this->belongsToMany(Event::class, 'event_user', 'user_id', 'event_id');
+    }
+
 }

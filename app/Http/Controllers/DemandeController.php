@@ -40,9 +40,6 @@ class DemandeController extends Controller
             'lastDay'=>'required',
             'totalDays'=>'required',
             'arriveOn'=>'required',
-
-
-
         ]);
 
         Demande::create([

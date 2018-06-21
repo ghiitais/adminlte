@@ -154,3 +154,9 @@ Route::post('uploadImages', 'MarketController@uploadImages');
 
 // Close ticket mobile
 Route::post('closeTicket/{id}', 'TicketsController@closeTicket');
+
+// Events
+Route::get('upload', 'EventController@showUpload');
+Route::post('upload_event', 'EventController@uploadEvent');
+Route::get('listEvents', 'EventController@listEvents');
+Route::post('participate/{id}', 'EventController@participate');
